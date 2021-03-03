@@ -42,7 +42,6 @@ class OtpVerify : AppCompatActivity() {
                 )
                     .show()
             }
-
             override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
                 verificationId = p0
             }
