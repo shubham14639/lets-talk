@@ -29,7 +29,6 @@ class PhoneAuthActivity : AppCompatActivity() {
             sendCodetoPhoneNumber(number)
         }
     }
-
     private fun sendCodetoPhoneNumber(phone: String) {
 
     }
