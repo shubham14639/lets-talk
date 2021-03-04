@@ -26,10 +26,6 @@ class PhoneAuthActivity : AppCompatActivity() {
             val intent = Intent(this, OtpVerify::class.java)
             intent.putExtra("NUMBER", number)
             startActivity(intent)
-            sendCodetoPhoneNumber(number)
         }
-    }
-    private fun sendCodetoPhoneNumber(phone: String) {
-
     }
 }

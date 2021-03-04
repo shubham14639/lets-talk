@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/mobile_auth" />
+            android:src="@drawable/mobile_auth"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,23 +31,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Verify"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:textSize="28sp"
-                android:layout_marginEnd="8dp" />
+                android:text="Verify"
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/tv_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="8dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/_918650922082"
                 android:textSize="28sp"
-                android:layout_marginStart="8dp" />
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -55,21 +57,99 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/verify"
-            android:textSize="20sp"
-            android:layout_marginStart="8dp" />
+            android:textSize="20sp" />
 
-
-        <EditText
-            android:id="@+id/et_phone"
+        <LinearLayout
+            android:id="@+id/ll_edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:hint="@string/enter_one_time_password" />
+            android:layout_height="90dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_one"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:nextFocusRight="@id/et_two"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_two"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:nextFocusRight="@id/et_three"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_three"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:nextFocusRight="@id/et_four"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_four"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:nextFocusRight="@id/et_five"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_five"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:nextFocusRight="@id/et_six"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_six"
+                android:layout_width="50dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="5dp"
+                android:alpha="0.7"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="1"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
 
         <Button
