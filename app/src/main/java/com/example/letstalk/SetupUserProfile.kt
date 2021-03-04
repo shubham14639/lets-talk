@@ -49,9 +49,9 @@ class SetupUserProfile : AppCompatActivity() {
             dialoge.show()
 
             if (selectedImage != null) {
-                val refrence = storage?.reference?.child("Profiles")?.child(auth?.uid!!)
+                val refrence = storage!!.reference.child("Profiles").child(auth?.uid.toString())
 
-                refrence?.putFile(selectedImage!!)?.addOnCompleteListener {
+                refrence.putFile(selectedImage!!).addOnCompleteListener {
                     if (it.isSuccessful) {
                         refrence.getDownloadUrl().addOnCompleteListener {
                             val imageurl = it.toString()
@@ -78,7 +78,7 @@ class SetupUserProfile : AppCompatActivity() {
 
                         database!!.reference
                             .child("users")
-                            .child(uid!!)
+                            .child(uid)
                             .setValue(user)
                             .addOnSuccessListener {
                                 dialoge.dismiss()
@@ -90,8 +90,6 @@ class SetupUserProfile : AppCompatActivity() {
                     }
                 }
             }
-
         }
-
     }
 }
