@@ -1,9 +1,11 @@
 package com.example.letstalk
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.letstalk.databinding.ActivityOtpVerifyBinding
@@ -12,16 +14,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.*
 import java.util.concurrent.TimeUnit
 
 class OtpVerify : AppCompatActivity(), TextWatcher {
     lateinit var binding: ActivityOtpVerifyBinding
 
     lateinit var mAuth: FirebaseAuth
+    lateinit var databaseReference: DatabaseReference
     lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var verificationId: String
+    lateinit var dialog: ProgressDialog
     lateinit var credential: PhoneAuthCredential
     lateinit var etotp: String
+    lateinit var number: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verify)
@@ -29,31 +35,34 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
         binding = ActivityOtpVerifyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        val number = intent.getStringExtra("NUMBER")
+        number = intent.getStringExtra("NUMBER").toString()
         binding.tvNumber.setText(number)
 
-
+        dialog= ProgressDialog(this)
+        dialog.setMessage("Sending Otp ...")
+        dialog.show()
         mAuth = FirebaseAuth.getInstance()
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-
+                Log.d("TESTLOG : oncomplete ",p0.smsCode)
             }
-
             override fun onVerificationFailed(p0: FirebaseException) {
+                dialog.hide()
+                Log.d("TESTLOG : oncomplete ",p0.message.toString())
                 Toast.makeText(
                     this@OtpVerify,
-                    "Verification Failed" + p0,
+                    "Verification Failed" + p0.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
             }
+
             override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+                dialog.hide()
                 verificationId = p0
             }
         }
         sendCodetoPhoneNumber(number)
-
         binding.let {
             it.etOne.addTextChangedListener(this)
             it.etTwo.addTextChangedListener(this)
@@ -62,7 +71,6 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
             it.etFive.addTextChangedListener(this)
             it.etSix.addTextChangedListener(this)
         }
-
         binding.submit.setOnClickListener {
             if (isFieldValid()) {
                 verifyCode(etotp)
@@ -71,9 +79,8 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
     }
 
     private fun sendCodetoPhoneNumber(number: String?) {
-        val phoneNumber = "+91" + (number)
         val options = PhoneAuthOptions.newBuilder(mAuth)
-            .setPhoneNumber(phoneNumber)
+            .setPhoneNumber(number)
             .setActivity(this)
             .setTimeout(60L, TimeUnit.SECONDS)
             .setCallbacks(mCallbacks)
@@ -154,7 +161,7 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
             etotp = sb.toString()
             return true
         } else {
-            Toast.makeText(this, "otp cannnot be empty", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Otp cannnot be empty", Toast.LENGTH_LONG).show()
             return false
         }
     }

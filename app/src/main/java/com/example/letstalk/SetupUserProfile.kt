@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
@@ -26,36 +27,36 @@ class SetupUserProfile : AppCompatActivity() {
         binding = ActivitySetupUserProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        storage = FirebaseStorage.getInstance()
+        auth= FirebaseAuth.getInstance()
+        database= FirebaseDatabase.getInstance()
+
         val dialoge = ProgressDialog(this)
         dialoge.setMessage("Updating Profile")
         dialoge.setCancelable(false)
 
         supportActionBar?.hide()
-
         binding.imageView.setOnClickListener {
             val intent = Intent()
             intent.setAction(Intent.ACTION_GET_CONTENT)
             intent.setType("image/*")
             startActivityForResult(intent, 22)
         }
-
         binding.continueBtn.setOnClickListener {
-
             val name = binding.nameBox.text.toString()
-
             if (name.isEmpty()) {
+                Toast.makeText(this, "Please Enter Your Name", Toast.LENGTH_LONG).show()
                 binding.nameBox.error = "Please type a name"
+            } else {
+                dialoge.show()
             }
-            dialoge.show()
 
             if (selectedImage != null) {
                 val refrence = storage!!.reference.child("Profiles").child(auth?.uid.toString())
-
                 refrence.putFile(selectedImage!!).addOnCompleteListener {
                     if (it.isSuccessful) {
                         refrence.getDownloadUrl().addOnCompleteListener {
                             val imageurl = it.toString()
-
                             val uid = auth!!.uid.toString()
                             val phone = auth!!.currentUser!!.phoneNumber.toString()
                             val name = binding.nameBox.text.toString()
@@ -69,13 +70,9 @@ class SetupUserProfile : AppCompatActivity() {
                                 }
                         }
                     } else {
-
-
                         val uid = auth!!.uid.toString()
-                        val phone = auth!!.currentUser!!.phoneNumber.toString()
-
+                        val phone = auth!!.currentUser.phoneNumber.toString()
                         val user = Users(uid, name, phone, "No Image")
-
                         database!!.reference
                             .child("users")
                             .child(uid)
@@ -90,6 +87,14 @@ class SetupUserProfile : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 22 && resultCode == RESULT_OK) {
+            selectedImage = data?.data
+            binding.imageView.setImageURI(selectedImage)
         }
     }
 }
