@@ -1,4 +1,4 @@
-package com.example.letstalk
+package com.example.letstalk.Activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,7 +17,7 @@ class PhoneAuthActivity : AppCompatActivity() {
 
         mAuth= FirebaseAuth.getInstance()
         if (mAuth.currentUser!=null){
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finishAffinity()
         }
         binding.submit.setOnClickListener {

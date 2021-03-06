@@ -1,4 +1,4 @@
-package com.example.letstalk
+package com.example.letstalk.Activity
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.letstalk.R
 import com.example.letstalk.databinding.ActivityOtpVerifyBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth

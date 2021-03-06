@@ -4,4 +4,5 @@
     <string name="verify">enter otp to verify phone number</string>
     <string name="enter_one_time_password">Enter One time password</string>
     <string name="let_s_go">Let\'s Go</string>
+    <string name="testdata">TestData</string>
 </resources>

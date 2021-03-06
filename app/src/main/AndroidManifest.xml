@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.letstalk">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -9,16 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LetsTalk">
-        <activity android:name=".SetupUserProfile"></activity>
-        <activity android:name=".OtpVerify" />
-        <activity android:name=".PhoneAuthActivity">
+        <activity android:name=".Activity.ChatActivity" />
+        <activity android:name=".Activity.SetupUserProfile" />
+        <activity android:name=".Activity.OtpVerify" />
+        <activity android:name=".Activity.PhoneAuthActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Activity.MainActivity" />
     </application>
 
 </manifest>

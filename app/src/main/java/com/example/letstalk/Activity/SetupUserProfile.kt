@@ -1,4 +1,4 @@
-package com.example.letstalk
+package com.example.letstalk.Activity
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.letstalk.R
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
 import com.google.firebase.auth.FirebaseAuth
