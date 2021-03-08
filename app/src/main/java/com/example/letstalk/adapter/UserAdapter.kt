@@ -36,12 +36,9 @@ class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
     override fun onBindViewHolder(holder: userViewHolder, position: Int) {
         val user = users!!.get(position)
         holder.tvName.text = user.name
-        Log.d("TESTLOG : ", user.imageUrl)
-        //todo(user image connot set so, you have to do that)
         Glide.with(cont).load(user.imageUrl).into(holder.ivImage)
 
         holder.itemView.setOnClickListener {
-
             val intent = Intent(cont, ChatActivity::class.java)
             intent.putExtra("name", user.name)
             intent.putExtra("uid", user.uid)

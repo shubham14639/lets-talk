@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 
+
 class SetupUserProfile : AppCompatActivity() {
     lateinit var binding: ActivitySetupUserProfileBinding
 
@@ -20,6 +21,7 @@ class SetupUserProfile : AppCompatActivity() {
     var database: FirebaseDatabase? = null
     var storage: FirebaseStorage? = null
     var selectedImage: Uri? = null
+    lateinit var dialoge: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +31,10 @@ class SetupUserProfile : AppCompatActivity() {
         setContentView(binding.root)
 
         storage = FirebaseStorage.getInstance()
-        auth= FirebaseAuth.getInstance()
-        database= FirebaseDatabase.getInstance()
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
 
-        val dialoge = ProgressDialog(this)
+        dialoge = ProgressDialog(this)
         dialoge.setMessage("Updating Profile")
         dialoge.setCancelable(false)
 
@@ -51,12 +53,11 @@ class SetupUserProfile : AppCompatActivity() {
             } else {
                 dialoge.show()
             }
-
             if (selectedImage != null) {
-                val refrence = storage!!.reference.child("Profiles").child(auth?.uid.toString())
-                refrence.putFile(selectedImage!!).addOnCompleteListener {
+                val storageRef = storage!!.reference.child("Profiles").child(auth?.uid.toString())
+                storageRef.putFile(selectedImage!!).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        refrence.getDownloadUrl().addOnCompleteListener {
+                        storageRef.getDownloadUrl().addOnCompleteListener {
                             val imageurl = it.toString()
                             val uid = auth!!.uid.toString()
                             val phone = auth!!.currentUser!!.phoneNumber.toString()
@@ -88,8 +89,10 @@ class SetupUserProfile : AppCompatActivity() {
                     }
                 }
             }
+
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
