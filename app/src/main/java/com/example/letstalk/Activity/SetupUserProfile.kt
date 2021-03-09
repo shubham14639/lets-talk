@@ -92,8 +92,6 @@ class SetupUserProfile : AppCompatActivity() {
 
         }
     }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 22 && resultCode == RESULT_OK) {

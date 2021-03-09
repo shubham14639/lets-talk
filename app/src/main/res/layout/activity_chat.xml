@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
-    android:background="#D6A3A3"
     tools:context=".Activity.ChatActivity">
 
     <androidx.cardview.widget.CardView
@@ -24,13 +23,12 @@
 
             <EditText
                 android:id="@+id/et_chatMsg"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Type a message..."
                 android:inputType="textPersonName"
-                android:text="Name"
                 android:textSize="18sp" />
 
             <ImageView
@@ -51,22 +49,23 @@
                 app:srcCompat="@drawable/ic_baseline_camera_alt_24"
                 tools:ignore="VectorDrawableCompat" />
 
-
-            <ImageView
-                android:src="@drawable/ic_baseline_send_24"
+            <Button
+                android:id="@+id/btn_send"
                 android:layout_width="36dp"
-                android:background="@color/green"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:background="@drawable/ic_baseline_send_24"
+                android:src="@drawable/ic_baseline_send_24" />
         </LinearLayout>
-
 
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/row_chat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

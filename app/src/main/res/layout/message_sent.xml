@@ -9,6 +9,7 @@
         android:text="Send Message"
         android:textSize="20sp"
         android:gravity="end"
+        android:layout_marginEnd="15dp"
         android:layout_marginRight="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

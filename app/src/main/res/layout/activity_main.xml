@@ -4,9 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B8E6EC"
     android:orientation="vertical"
     tools:context=".Activity.MainActivity">
+
+    <ProgressBar
+        android:id="@+id/pv_bar"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

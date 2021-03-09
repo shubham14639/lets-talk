@@ -32,22 +32,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         userList = ArrayList()
         auth = FirebaseAuth.getInstance()
+
         dialoge = ProgressDialog(this)
         dialoge.setMessage("Loading User Profiles")
         dialoge.setCancelable(false)
 
         getAllUsers()
-        /* val storageReference = FirebaseStorage.getInstance()
-                .getReferenceFromUrl("gs://let-s-talk-b968e.appspot.com/Profiles/4LDZNTj8KQSbOOB92ytcS9Okcbb2")
-            storageReference.downloadUrl.addOnCompleteListener {
-                imageUrl = it.result.toString()
-                getAllUsers()
-            }*/
-
+        Log.d("TESTLOG : ", auth.currentUser.uid)
     }
 
     private fun getAllUsers() {
-        var imageUrl: String = ""
         dialoge.show()
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -59,8 +53,7 @@ class MainActivity : AppCompatActivity() {
                     val storageReference = FirebaseStorage.getInstance()
                         .getReferenceFromUrl("gs://let-s-talk-b968e.appspot.com/Profiles/")
                     storageReference.child(snap.child("uid").value.toString()).downloadUrl.addOnCompleteListener {
-                        imageUrl = it.result.toString()
-                        //   Log.d("TESTLOG : ", "final image url $imageUrl")
+                        val imageUrl = it.result.toString()
                         val users = Users(uid, name, phone, imageUrl)
                         userList.add(users)
                         userAdapter = UserAdapter(this@MainActivity, userList)
@@ -68,24 +61,24 @@ class MainActivity : AppCompatActivity() {
                             it.layoutManager = LinearLayoutManager(this@MainActivity)
                             it.adapter = userAdapter
                         }
+
                         Log.d("TESTLOG : ", users.toString())
                         dialoge.dismiss()
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
             }
         })
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
                 auth = FirebaseAuth.getInstance()
-                auth.currentUser.delete()
+                auth.signOut()
                 startActivity(Intent(this, PhoneAuthActivity::class.java))
             }
-
         }
         return super.onOptionsItemSelected(item)
     }
