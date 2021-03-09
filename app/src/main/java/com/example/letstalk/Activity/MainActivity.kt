@@ -36,9 +36,7 @@ class MainActivity : AppCompatActivity() {
         dialoge = ProgressDialog(this)
         dialoge.setMessage("Loading User Profiles")
         dialoge.setCancelable(false)
-
         getAllUsers()
-        Log.d("TESTLOG : ", auth.currentUser.uid)
     }
 
     private fun getAllUsers() {
@@ -46,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val loginUser = snapshot.child(auth.uid!!).child("name").value.toString()
                 for (snap: DataSnapshot in snapshot.children) {
                     val name = snap.child("name").value.toString()
                     val phone = snap.child("phone").value.toString()
@@ -54,15 +53,13 @@ class MainActivity : AppCompatActivity() {
                         .getReferenceFromUrl("gs://let-s-talk-b968e.appspot.com/Profiles/")
                     storageReference.child(snap.child("uid").value.toString()).downloadUrl.addOnCompleteListener {
                         val imageUrl = it.result.toString()
-                        val users = Users(uid, name, phone, imageUrl)
+                        val users = Users(uid, name, phone, imageUrl, loginUser)
                         userList.add(users)
                         userAdapter = UserAdapter(this@MainActivity, userList)
                         binding.recyclerView.let {
                             it.layoutManager = LinearLayoutManager(this@MainActivity)
                             it.adapter = userAdapter
                         }
-
-                        Log.d("TESTLOG : ", users.toString())
                         dialoge.dismiss()
                     }
                 }
@@ -82,9 +79,9 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
 }

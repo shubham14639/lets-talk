@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -36,16 +35,18 @@ class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
     }
 
     override fun onBindViewHolder(holder: userViewHolder, position: Int) {
-        val user = users!!.get(position)
+        val user = users!![position]
         holder.bind(user)
         holder.itemView.setOnClickListener {
             val intent = Intent(cont, ChatActivity::class.java)
             intent.putExtra("name", user.name)
             intent.putExtra("imageUrl", user.imageUrl)
             intent.putExtra("uid", user.uid)
+            intent.putExtra("currentUser", user.currentUser)
             cont.startActivity(intent)
         }
     }
+
     override fun getItemCount(): Int {
         return users!!.size
     }

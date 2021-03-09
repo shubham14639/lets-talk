@@ -10,15 +10,15 @@ import com.example.letstalk.R
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
-
 
 class SetupUserProfile : AppCompatActivity() {
     lateinit var binding: ActivitySetupUserProfileBinding
 
     var auth: FirebaseAuth? = null
     var database: FirebaseDatabase? = null
+    var databaseReference:DatabaseReference?= null
     var storage: FirebaseStorage? = null
     var selectedImage: Uri? = null
     lateinit var dialoge: ProgressDialog
@@ -33,6 +33,7 @@ class SetupUserProfile : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+
 
         dialoge = ProgressDialog(this)
         dialoge.setMessage("Updating Profile")
@@ -53,45 +54,25 @@ class SetupUserProfile : AppCompatActivity() {
             } else {
                 dialoge.show()
             }
-            if (selectedImage != null) {
-                val storageRef = storage!!.reference.child("Profiles").child(auth?.uid.toString())
-                storageRef.putFile(selectedImage!!).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        storageRef.getDownloadUrl().addOnCompleteListener {
-                            val imageurl = it.toString()
-                            val uid = auth!!.uid.toString()
-                            val phone = auth!!.currentUser!!.phoneNumber.toString()
-                            val name = binding.nameBox.text.toString()
-                            val users = Users(uid, name, phone, imageurl)
-                            database?.reference?.child("users")?.child(uid)?.setValue(users)
-                                ?.addOnCompleteListener {
-                                    dialoge.dismiss()
-                                    val intent = Intent(this, MainActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                }
-                        }
-                    } else {
-                        val uid = auth!!.uid.toString()
-                        val phone = auth!!.currentUser.phoneNumber.toString()
-                        val user = Users(uid, name, phone, "No Image")
-                        database!!.reference
-                            .child("users")
-                            .child(uid)
-                            .setValue(user)
-                            .addOnSuccessListener {
-                                dialoge.dismiss()
-                                val intent =
-                                    Intent(this, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                    }
-                }
-            }
-
+            createUserData(name)
+            setUpUserData()
         }
     }
+
+    private fun setUpUserData() {
+       databaseReference=FirebaseDatabase.getInstance().getReference("users")
+        databaseReference?.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.child(auth?.uid!!).child("phone")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 22 && resultCode == RESULT_OK) {
@@ -99,4 +80,43 @@ class SetupUserProfile : AppCompatActivity() {
             binding.imageView.setImageURI(selectedImage)
         }
     }
+
+    fun createUserData(name: String) {
+        if (selectedImage != null) {
+            val storageRef = storage!!.reference.child("Profiles").child(auth?.uid.toString())
+            storageRef.putFile(selectedImage!!).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    storageRef.getDownloadUrl().addOnCompleteListener {
+                        val imageurl = it.toString()
+                        val uid = auth!!.uid.toString()
+                        val phone = auth!!.currentUser!!.phoneNumber.toString()
+                        val users = Users(uid, name, phone, imageurl," ")
+                        database?.reference?.child("users")?.child(uid)?.setValue(users)
+                            ?.addOnCompleteListener {
+                                dialoge.dismiss()
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                    }
+                } else {
+                    val uid = auth!!.uid.toString()
+                    val phone = auth!!.currentUser.phoneNumber.toString()
+                    val user = Users(uid, name, phone, "No Image","")
+                    database!!.reference
+                        .child("users")
+                        .child(uid)
+                        .setValue(user)
+                        .addOnSuccessListener {
+                            dialoge.dismiss()
+                            val intent =
+                                Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                }
+            }
+        }
+    }
+
 }
