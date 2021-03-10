@@ -18,7 +18,7 @@ class SetupUserProfile : AppCompatActivity() {
 
     var auth: FirebaseAuth? = null
     var database: FirebaseDatabase? = null
-    var databaseReference:DatabaseReference?= null
+    var databaseReference: DatabaseReference? = null
     var storage: FirebaseStorage? = null
     var selectedImage: Uri? = null
     lateinit var dialoge: ProgressDialog
@@ -60,16 +60,14 @@ class SetupUserProfile : AppCompatActivity() {
     }
 
     private fun setUpUserData() {
-       databaseReference=FirebaseDatabase.getInstance().getReference("users")
-        databaseReference?.addValueEventListener(object :ValueEventListener{
+        databaseReference = FirebaseDatabase.getInstance().getReference("users")
+        databaseReference?.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.child(auth?.uid!!).child("phone")
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
         })
     }
 
@@ -90,7 +88,7 @@ class SetupUserProfile : AppCompatActivity() {
                         val imageurl = it.toString()
                         val uid = auth!!.uid.toString()
                         val phone = auth!!.currentUser!!.phoneNumber.toString()
-                        val users = Users(uid, name, phone, imageurl," ")
+                        val users = Users(uid, name, phone, imageurl,"")
                         database?.reference?.child("users")?.child(uid)?.setValue(users)
                             ?.addOnCompleteListener {
                                 dialoge.dismiss()
@@ -118,5 +116,4 @@ class SetupUserProfile : AppCompatActivity() {
             }
         }
     }
-
 }

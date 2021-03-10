@@ -1,6 +1,6 @@
 package com.example.letstalk.model
 
-data class Messages(
+ class Messages(
     val senderId: String = "",
     val message: String = "",
     val timeStamp: String = "",

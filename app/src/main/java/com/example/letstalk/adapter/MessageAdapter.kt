@@ -43,7 +43,6 @@ class MessageAdapter(var context: Context, var message: ArrayList<Messages>) :
 
     override fun getItemViewType(position: Int): Int {
 
-
         val messages = message.get(position)
         if (auth.uid == messages.senderId) {
             Log.d("TESTLOG : itemview", ITEM_SEND.toString())
