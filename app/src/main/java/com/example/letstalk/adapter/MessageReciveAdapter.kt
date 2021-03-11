@@ -8,12 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.letstalk.R
 import com.example.letstalk.model.Messages
-import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 
-class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>) :
-    RecyclerView.Adapter<MessageAdapter.SendViewHolder>() {
+class MessageReciveAdapter(val context: Context, val messageList: ArrayList<Messages>) :
+    RecyclerView.Adapter<MessageReciveAdapter.ReciveViewHolder>() {
 
     companion object {
         const val MESSAGE_SEND: Int = 1
@@ -32,10 +31,10 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.SendViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageReciveAdapter.ReciveViewHolder {
 
-        val view = LayoutInflater.from(context).inflate(R.layout.message_sent, parent, false)
-        return SendViewHolder(view)
+        val view = LayoutInflater.from(context).inflate(R.layout.message_recived, parent, false)
+        return ReciveViewHolder(view)
        /* if (viewType == MESSAGE_SEND) {
             val view = LayoutInflater.from(context).inflate(R.layout.message_sent, parent, false)
             return SendViewHolder(view)
@@ -52,7 +51,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             return MESSAGE_RECIVE
     }*/
 
-    override fun onBindViewHolder(holder: MessageAdapter.SendViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MessageReciveAdapter.ReciveViewHolder, position: Int) {
 
         holder.bind(messageList[position])
 

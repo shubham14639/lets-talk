@@ -3,7 +3,6 @@ package com.example.letstalk.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         dialoge = ProgressDialog(this)
         dialoge.setMessage("Loading User Profiles")
         dialoge.setCancelable(false)
+
         getAllUsers()
     }
 
@@ -45,24 +45,31 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val loginUser = snapshot.child(auth.uid!!).child("name").value.toString()
                 for (snap: DataSnapshot in snapshot.children) {
-                    val name = snap.child("name").value.toString()
-                    val phone = snap.child("phone").value.toString()
-                    val uid = snap.child("uid").value.toString()
+                    val user: Users? = snap.getValue(Users::class.java)
+                       val name= user?.name!!
+                       val uid= user.uid
+                       val phone= user.phone
                     val storageReference = FirebaseStorage.getInstance()
                         .getReferenceFromUrl("gs://let-s-talk-b968e.appspot.com/Profiles/")
-                    storageReference.child(snap.child("uid").value.toString()).downloadUrl.addOnCompleteListener {
-                        val imageUrl = it.result.toString()
-                        val users = Users(uid, name, phone, imageUrl, loginUser)
-                        userList.add(users)
-                        userAdapter = UserAdapter(this@MainActivity, userList)
-                        binding.recyclerView.let {
-                            it.layoutManager = LinearLayoutManager(this@MainActivity)
-                            it.adapter = userAdapter
+                    storageReference
+                        .child(
+                            snap.child("uid")
+                                .value.toString()
+                        ).downloadUrl
+                        .addOnCompleteListener {
+                            val imageUrl = it.result.toString()
+                            val users = Users(uid, name, phone, imageUrl, loginUser)
+                            userList.add(users)
+                            userAdapter = UserAdapter(this@MainActivity, userList)
+                            binding.recyclerView.let {
+                                it.layoutManager = LinearLayoutManager(this@MainActivity)
+                                it.adapter = userAdapter
+                            }
+                            dialoge.dismiss()
                         }
-                        dialoge.dismiss()
-                    }
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
             }
         })
@@ -78,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.top_menu, menu)
         return super.onCreateOptionsMenu(menu)
