@@ -14,7 +14,6 @@ import com.example.letstalk.Activity.MainActivity
 import com.example.letstalk.R
 import com.example.letstalk.model.Users
 
-
 class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
     RecyclerView.Adapter<UserAdapter.userViewHolder>() {
     var cont: Context = mainActivity

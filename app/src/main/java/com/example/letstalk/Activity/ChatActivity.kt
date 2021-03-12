@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.letstalk.adapter.MessageAdapter
-import com.example.letstalk.adapter.MessageReciveAdapter
 import com.example.letstalk.databinding.ActivityChatBinding
 import com.example.letstalk.model.Messages
 import com.google.firebase.auth.FirebaseAuth
@@ -21,12 +20,9 @@ class ChatActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityChatBinding
     lateinit var database: FirebaseDatabase
-    lateinit var refrence: DatabaseReference
     lateinit var auth: FirebaseAuth
     lateinit var messageAdapter: MessageAdapter
-    lateinit var messageReciveAdapter: MessageReciveAdapter
     lateinit var messageList: ArrayList<Messages>
-    lateinit var messageReciveList: ArrayList<Messages>
 
     lateinit var senderRoom: String
     lateinit var reciverRoom: String
@@ -41,18 +37,11 @@ class ChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
 
         messageList = ArrayList()
-        messageReciveList = ArrayList()
 
         messageAdapter = MessageAdapter(this@ChatActivity, messageList)
-        binding.chatRecyclerView.let {
+        binding.chatRecylerview.let {
             it.layoutManager = LinearLayoutManager(this@ChatActivity)
             it.adapter = messageAdapter
-        }
-        messageReciveAdapter = MessageReciveAdapter(this, messageReciveList)
-
-        binding.chatRecyclerViewRecive.let {
-            it.layoutManager = LinearLayoutManager(this@ChatActivity)
-            it.adapter = messageReciveAdapter
         }
 
         val title = intent.getStringExtra("name")
@@ -65,7 +54,9 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = "$senderName --->>> $reciverName"
         reciverRoom = "$reciverName <<<--- $senderName"
 
-        database.getReference()
+        listenMessages()
+
+/*        database.getReference()
             .child("chats")
             .child(senderRoom)
             .addValueEventListener(object : ValueEventListener {
@@ -78,51 +69,57 @@ class ChatActivity : AppCompatActivity() {
                     }
                     messageAdapter.notifyDataSetChanged()
                 }
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ChatActivity, error.message, Toast.LENGTH_LONG).show()
-                }
-            })
-
-        database.getReference()
-            .child("chats")
-            .child("hFYQ8e9i8DVK2KhZV8kWNH71oKv2 <<<--- WVBokomtuYamDtOPGZ6hERPa99e2")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    messageReciveList.clear()
-                    for (snap: DataSnapshot in snapshot.children) {
-                        Log.d("TESTLOG", snap.key!!)
-                        val messages: Messages? = snap.getValue(Messages::class.java)
-                        messageReciveList.add(messages!!)
-                    }
-                    messageReciveAdapter.notifyDataSetChanged()
-                }
 
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(this@ChatActivity, error.message, Toast.LENGTH_LONG).show()
                 }
-            })
-
+            })*/
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
             if (msgTxt.isNotEmpty()) {
-                val df = SimpleDateFormat("HH:mm:ss a")
-                val currentTime: String = df.format(Calendar.getInstance().time)
-                val message = Messages(senderName!!, msgTxt, currentTime, reciverName!!)
-                binding.etChatMsg.setText("")
-                database.getReference().child("chats")
-                    .child(senderRoom)
-                    .push()
-                    .setValue(message).addOnCompleteListener {
-                        if (it.isSuccessful) {
-                            database.getReference().child("chats")
-                                .child(reciverRoom)
-                                .push()
-                                .setValue(message).addOnCompleteListener {
-                                }
-                        }
-                    }
+                sendMessages(senderName, msgTxt, reciverName)
             } else Toast.makeText(this, "type a message", Toast.LENGTH_LONG).show()
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun sendMessages(senderName: String?, msgTxt: String, reciverName: String?) {
+        val df = SimpleDateFormat("HH:mm:ss a")
+        val currentTime: String = df.format(Calendar.getInstance().time)
+        val message = Messages(senderName!!, msgTxt, currentTime, reciverName!!)
+        binding.etChatMsg.setText("")
+        database.getReference().child("chats")
+            .push()
+            .setValue(message).addOnCompleteListener {
+
+            }
+    }
+
+    private fun listenMessages() {
+        val ref = database.getReference().child("chats")
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messageList.clear()
+                for (snap in snapshot.children) {
+                    val chat = snap.getValue(Messages::class.java)
+                    if (chat != null) {
+                        Log.d(
+                            "TESTLOG",
+                            "${chat.reciverId} auth id ${FirebaseAuth.getInstance().uid}"
+                        )
+                        if (chat.reciverId == FirebaseAuth.getInstance().uid) {
+                            messageList.add(chat)
+                        } else
+                            messageList.add(chat)
+                    }
+                    messageAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -130,7 +127,6 @@ class ChatActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 }
-
 
 // Code of set Background Image of layout using glide
 /*     Glide.with(this).load(imageUrl).into(object :
@@ -145,5 +141,4 @@ class ChatActivity : AppCompatActivity() {
          ) {
              binding.mainLayout.background = resource
          }
-
      })*/
