@@ -19,6 +19,7 @@
                 android:id="@+id/imageViewRecive"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:src="@drawable/avatar"
@@ -28,16 +29,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:background="#F8F5E0"
                 app:cardBackgroundColor="#F8F5E0"
+                app:cardCornerRadius="10dp"
                 app:contentPadding="3dp">
 
-                <TextView
-                    android:id="@+id/tv_msg_recive"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Send Message"
-                    android:textSize="20sp" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_msg_recive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="#F8F5E0"
+                        android:text="Recived Message"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_recive"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+
             </androidx.cardview.widget.CardView>
 
 

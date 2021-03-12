@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
 import com.example.letstalk.model.Messages
-import com.example.letstalk.model.Users
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
 class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>) :
@@ -21,14 +21,13 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     companion object {
         const val MESSAGE_SEND: Int = 1
         const val MESSAGE_RECIVE: Int = 2
-        val users = Users()
+
     }
 
     inner class SendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(messages: Messages) {
             itemView.findViewById<TextView>(R.id.tv_msg_send).text = messages.message
             val imageView = itemView.findViewById<ImageView>(R.id.imageViewSend)
-            Glide.with(context).load(users.imageUrl).placeholder(R.drawable.avatar).into(imageView)
         }
     }
 
@@ -36,7 +35,6 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
         fun bind(messages: Messages) {
             itemView.findViewById<TextView>(R.id.tv_msg_recive).text = messages.message
             val imageView = itemView.findViewById<ImageView>(R.id.imageViewRecive)
-            Glide.with(context).load(users.imageUrl).placeholder(R.drawable.avatar).into(imageView)
         }
     }
 

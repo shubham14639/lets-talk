@@ -85,10 +85,10 @@ class SetupUserProfile : AppCompatActivity() {
             storageRef.putFile(selectedImage!!).addOnCompleteListener {
                 if (it.isSuccessful) {
                     storageRef.getDownloadUrl().addOnCompleteListener {
-                        val imageurl = it.toString()
+                        val imageurl = it.result.toString()
                         val uid = auth!!.uid.toString()
                         val phone = auth!!.currentUser!!.phoneNumber.toString()
-                        val users = Users(uid, name, phone, imageurl,"")
+                        val users = Users(uid, name, phone, imageurl, "")
                         database?.reference?.child("users")?.child(uid)?.setValue(users)
                             ?.addOnCompleteListener {
                                 dialoge.dismiss()
@@ -100,7 +100,7 @@ class SetupUserProfile : AppCompatActivity() {
                 } else {
                     val uid = auth!!.uid.toString()
                     val phone = auth!!.currentUser.phoneNumber.toString()
-                    val user = Users(uid, name, phone, "No Image","")
+                    val user = Users(uid, name, phone, "No Image", "")
                     database!!.reference
                         .child("users")
                         .child(uid)

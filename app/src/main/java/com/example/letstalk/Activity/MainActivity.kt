@@ -43,30 +43,16 @@ class MainActivity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val loginUser = snapshot.child(auth.uid!!).child("name").value.toString()
                 for (snap: DataSnapshot in snapshot.children) {
                     val user: Users? = snap.getValue(Users::class.java)
-                       val name= user?.name!!
-                       val uid= user.uid
-                       val phone= user.phone
-                    val storageReference = FirebaseStorage.getInstance()
-                        .getReferenceFromUrl("gs://let-s-talk-b968e.appspot.com/Profiles/")
-                    storageReference
-                        .child(
-                            snap.child("uid")
-                                .value.toString()
-                        ).downloadUrl
-                        .addOnCompleteListener {
-                            val imageUrl = it.result.toString()
-                            val users = Users(uid, name, phone, imageUrl, loginUser)
-                            userList.add(users)
-                            userAdapter = UserAdapter(this@MainActivity, userList)
-                            binding.recyclerView.let {
-                                it.layoutManager = LinearLayoutManager(this@MainActivity)
-                                it.adapter = userAdapter
-                            }
-                            dialoge.dismiss()
-                        }
+                    if (!user!!.uid.equals(FirebaseAuth.getInstance().uid))
+                        userList.add(user)
+                    userAdapter = UserAdapter(this@MainActivity, userList)
+                    binding.recyclerView.let {
+                        it.layoutManager = LinearLayoutManager(this@MainActivity)
+                        it.adapter = userAdapter
+                    }
+                    dialoge.dismiss()
                 }
             }
 
