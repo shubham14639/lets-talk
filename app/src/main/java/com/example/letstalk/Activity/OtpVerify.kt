@@ -22,7 +22,6 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
     lateinit var binding: ActivityOtpVerifyBinding
 
     lateinit var mAuth: FirebaseAuth
-    lateinit var databaseReference: DatabaseReference
     lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var verificationId: String
     lateinit var dialog: ProgressDialog

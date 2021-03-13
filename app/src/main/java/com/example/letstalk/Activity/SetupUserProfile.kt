@@ -4,8 +4,10 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.letstalk.R
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
@@ -18,7 +20,6 @@ class SetupUserProfile : AppCompatActivity() {
 
     var auth: FirebaseAuth? = null
     var database: FirebaseDatabase? = null
-    var databaseReference: DatabaseReference? = null
     var storage: FirebaseStorage? = null
     var selectedImage: Uri? = null
     lateinit var dialoge: ProgressDialog
@@ -34,11 +35,11 @@ class SetupUserProfile : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-
         dialoge = ProgressDialog(this)
-        dialoge.setMessage("Updating Profile")
+        dialoge.setMessage("Loading Profile Please Wait")
         dialoge.setCancelable(false)
-
+        dialoge.show()
+        checkUserExist()
         supportActionBar?.hide()
         binding.imageView.setOnClickListener {
             val intent = Intent()
@@ -47,28 +48,18 @@ class SetupUserProfile : AppCompatActivity() {
             startActivityForResult(intent, 22)
         }
         binding.continueBtn.setOnClickListener {
-            val name = binding.nameBox.text.toString()
-            if (name.isEmpty()) {
-                Toast.makeText(this, "Please Enter Your Name", Toast.LENGTH_LONG).show()
-                binding.nameBox.error = "Please type a name"
+            if (checkUserExist()) {
+                startActivity(Intent(this, MainActivity::class.java))
             } else {
-                dialoge.show()
+                val name = binding.nameBox.text.toString()
+                if (name.isEmpty() || selectedImage == null) {
+                    Toast.makeText(this, "Please Enter Valid Details", Toast.LENGTH_LONG).show()
+                    binding.nameBox.error = "Please type a name"
+                } else {
+                    createUserData(name)
+                }
             }
-            createUserData(name)
-            setUpUserData()
         }
-    }
-
-    private fun setUpUserData() {
-        databaseReference = FirebaseDatabase.getInstance().getReference("users")
-        databaseReference?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.child(auth?.uid!!).child("phone")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -79,41 +70,61 @@ class SetupUserProfile : AppCompatActivity() {
         }
     }
 
+    fun checkUserExist(): Boolean {
+        val ref = database!!.getReference("users").child(auth?.uid!!)
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val user: Users? = snapshot.getValue(Users::class.java)
+                Log.d("TESTLOG", "User data is " + user!!.name)
+                Glide.with(this@SetupUserProfile).load(user.imageUrl).into(binding.imageView)
+                binding.nameBox.setText(user.name)
+                dialoge.hide()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                dialoge.hide()
+                Log.d("TESTLOG", "user exits" + error.message)
+            }
+        })
+        return true
+    }
+
     fun createUserData(name: String) {
         if (selectedImage != null) {
+            val dia = ProgressDialog(this)
+            dia.setMessage("Updating Profile")
+            dia.setCancelable(false)
+            dia.show()
             val storageRef = storage!!.reference.child("Profiles").child(auth?.uid.toString())
             storageRef.putFile(selectedImage!!).addOnCompleteListener {
+                val uid = auth!!.uid.toString()
+                val phone = auth?.currentUser?.phoneNumber.toString()
                 if (it.isSuccessful) {
                     storageRef.getDownloadUrl().addOnCompleteListener {
                         val imageurl = it.result.toString()
-                        val uid = auth!!.uid.toString()
-                        val phone = auth!!.currentUser!!.phoneNumber.toString()
                         val users = Users(uid, name, phone, imageurl, "")
                         database?.reference?.child("users")?.child(uid)?.setValue(users)
                             ?.addOnCompleteListener {
-                                dialoge.dismiss()
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
+                                dia.dismiss()
+                                startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                             }
                     }
                 } else {
-                    val uid = auth!!.uid.toString()
-                    val phone = auth!!.currentUser.phoneNumber.toString()
                     val user = Users(uid, name, phone, "No Image", "")
                     database!!.reference
                         .child("users")
                         .child(uid)
                         .setValue(user)
                         .addOnSuccessListener {
-                            dialoge.dismiss()
-                            val intent =
-                                Intent(this, MainActivity::class.java)
-                            startActivity(intent)
+                            dia.dismiss()
+                            startActivity(Intent(this@SetupUserProfile, MainActivity::class.java))
                             finish()
                         }
                 }
             }
+        } else {
+            Toast.makeText(this, "Image is empty", Toast.LENGTH_LONG).show()
         }
     }
 }

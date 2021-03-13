@@ -16,7 +16,7 @@
             android:gravity="start">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageViewRecive"
+                android:id="@+id/iv_userRecive_profile"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
@@ -48,13 +48,12 @@
                         android:textSize="20sp" />
 
                     <ImageView
-                        android:id="@+id/iv_recive"
+                        android:id="@+id/iv_pic_recive"
                         android:layout_width="250dp"
                         android:layout_height="250dp"
                         android:layout_marginTop="10dp"
                         android:visibility="gone" />
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 

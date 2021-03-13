@@ -13,13 +13,11 @@ class Messages {
         message: String,
         timeStamp: String,
         reciverId: String,
-        imageUrl:String
     ) {
         this.reciverId = reciverId
         this.timeStamp = timeStamp
         this.message = message
         this.senderId = senderId
-        this.imageUrl=imageUrl
     }
 }
 
