@@ -3,16 +3,19 @@ package com.example.letstalk.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.AppLog
 import com.example.letstalk.adapter.UserAdapter
 import com.example.letstalk.databinding.ActivityMainBinding
 import com.example.letstalk.model.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +39,13 @@ class MainActivity : AppCompatActivity() {
         dialoge.setCancelable(false)
 
         getAllUsers()
+
+
+    /*    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
+            if (it.isSuccessful) {
+                AppLog.logger(it.result?.token!!)
+            }
+        }*/
     }
 
     private fun getAllUsers() {
@@ -76,5 +86,4 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.top_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 }

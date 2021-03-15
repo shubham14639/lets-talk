@@ -140,15 +140,12 @@ class ChatActivity : AppCompatActivity() {
                             messageList.add(chat)
                         messageAdapter.notifyDataSetChanged()
                         binding.chatRecylerview.smoothScrollToPosition(messageList.size)
-
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
 
             }
-
         })
     }
 
