@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.placeHolder
 import com.example.letstalk.model.Messages
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
@@ -23,15 +24,15 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     }
 
     inner class SendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(messages: Messages, circularProgressDrawable: CircularProgressDrawable) {
-
+        fun bind(messages: Messages) {
             val imageSend = itemView.findViewById<ImageView>(R.id.iv_pic_send)
             val userPic = itemView.findViewById<ImageView>(R.id.iv_userSend_profile)
             val msg = itemView.findViewById<TextView>(R.id.tv_msg_send)
             if (messages.message.equals("Images")) {
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(circularProgressDrawable)
+                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
+                    placeHolder(context))
                     .into(imageSend)
             } else {
                 imageSend.visibility = View.GONE
@@ -42,14 +43,15 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     }
 
     inner class ReciveViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(messages: Messages, circularProgressDrawable: CircularProgressDrawable) {
+        fun bind(messages: Messages) {
             val imageRecive = itemView.findViewById<ImageView>(R.id.iv_pic_recive)
             val userPic = itemView.findViewById<ImageView>(R.id.iv_userRecive_profile)
             val msg = itemView.findViewById<TextView>(R.id.tv_msg_recive)
             if (messages.message.equals("Images")) {
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(circularProgressDrawable)
+                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
+                    placeHolder(context))
                     .into(imageRecive)
             } else {
                 imageRecive.visibility = View.GONE
@@ -78,14 +80,10 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val circularProgressDrawable = CircularProgressDrawable(context)
-        circularProgressDrawable.strokeWidth = 12f
-        circularProgressDrawable.centerRadius = 50f
-        circularProgressDrawable.start()
         if (holder.javaClass == SendViewHolder::class.java) {
-            (holder as (SendViewHolder)).bind(messageList[position], circularProgressDrawable)
+            (holder as (SendViewHolder)).bind(messageList[position])
         } else
-            (holder as (ReciveViewHolder)).bind(messageList[position], circularProgressDrawable)
+            (holder as (ReciveViewHolder)).bind(messageList[position])
     }
 
     override fun getItemCount(): Int {

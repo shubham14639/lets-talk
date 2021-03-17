@@ -1,7 +1,13 @@
 package com.example.letstalk.Services
 
-import android.app.Application
-import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import androidx.core.app.NotificationCompat
+import com.example.letstalk.Activity.ChatActivity
+import com.example.letstalk.R
 import com.example.letstalk.Uitil.AppLog
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -12,12 +18,12 @@ class FcmNotification : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        if (message.notification!=null) {
-            val body = message.notification?.body
-            val title = message.notification?.title
-
+        if (message.notification != null) {
+            val title = message.notification?.title.toString()
+            val body = message.notification?.body.toString()
+            showNotification(title,body)
             AppLog.logger("Title is $title and body is $body and total data is ${message.data}")
-        }else{
+        } else {
             AppLog.logger("message is null")
         }
     }
@@ -26,10 +32,26 @@ class FcmNotification : FirebaseMessagingService() {
         super.onDeletedMessages()
     }
 
-}
-class App :Application(){
-     var CHANNEL_ID="FCM_CHANNEL_ID"
-    override fun onCreate() {
-        super.onCreate()
+    fun showNotification(title: String, message: String) {
+        val mNotificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "YOUR_CHANNEL_ID",
+                "YOUR_CHANNEL_NAME",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            mNotificationManager.createNotificationChannel(channel)
+        }
+        val mBuilder = NotificationCompat.Builder(applicationContext, "YOUR_CHANNEL_ID")
+            .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+            .setContentTitle(title) // title for notification
+            .setContentText(message)// message for notification
+            .setAutoCancel(true) // clear notification after click
+        val intent = Intent(applicationContext, ChatActivity::class.java)
+        val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mBuilder.setContentIntent(pi)
+        mNotificationManager.notify(0, mBuilder.build())
     }
+
 }

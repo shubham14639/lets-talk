@@ -5,7 +5,6 @@ class Users {
      var name: String = ""
      var phone: String = ""
      var imageUrl: String = ""
-     var currentUser: String = ""
 
     constructor()
     constructor(
@@ -13,13 +12,11 @@ class Users {
         name: String,
         phone: String,
         imageUrl: String,
-        currentUser: String
     ) {
         this.uid = uid
         this.name = name
         this.phone = phone
         this.imageUrl = imageUrl
-        this.currentUser = currentUser
     }
 }
 

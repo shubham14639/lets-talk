@@ -1,6 +1,5 @@
 package com.example.letstalk.Activity
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.letstalk.R
 import com.example.letstalk.Uitil.AppLog
+import com.example.letstalk.Uitil.makeToast
+import com.example.letstalk.Uitil.progresDialog
 import com.example.letstalk.adapter.UserAdapter
 import com.example.letstalk.databinding.ActivityMainBinding
 import com.example.letstalk.model.Users
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     lateinit var userAdapter: UserAdapter
     lateinit var userList: ArrayList<Users>
-    lateinit var dialoge: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -34,22 +33,35 @@ class MainActivity : AppCompatActivity() {
         userList = ArrayList()
         auth = FirebaseAuth.getInstance()
 
-        dialoge = ProgressDialog(this)
-        dialoge.setMessage("Loading User Profiles")
-        dialoge.setCancelable(false)
-
         getAllUsers()
 
-
-    /*    FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener {
-            if (it.isSuccessful) {
-                AppLog.logger(it.result?.token!!)
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener(object :
+            BottomNavigationView.OnNavigationItemReselectedListener,
+            BottomNavigationView.OnNavigationItemSelectedListener {
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when (item.itemId) {
+                    R.id.ic_profile -> {
+                        startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
+                    }
+                    R.id.ic_calls -> {
+                        makeToast(this@MainActivity, "Calls Clicks")
+                    }
+                    R.id.ic_chat -> {
+                        // startActivity(Intent(this@MainActivity, ChatFragment::class.java))
+                    }
+                }
+                return true
             }
-        }*/
+
+            override fun onNavigationItemReselected(item: MenuItem) {
+
+            }
+        })
+
     }
 
     private fun getAllUsers() {
-        dialoge.show()
+        val dialog = progresDialog(this, "Loading Please Wait...")
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -62,11 +74,13 @@ class MainActivity : AppCompatActivity() {
                         it.layoutManager = LinearLayoutManager(this@MainActivity)
                         it.adapter = userAdapter
                     }
-                    dialoge.dismiss()
+                    dialog.dismiss()
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
+                AppLog.logger(error.message)
+                dialog.dismiss()
             }
         })
     }
@@ -77,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 auth = FirebaseAuth.getInstance()
                 auth.signOut()
                 startActivity(Intent(this, PhoneAuthActivity::class.java))
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)

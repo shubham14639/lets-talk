@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.progresDialog
 import com.example.letstalk.databinding.ActivityOtpVerifyBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -24,10 +25,10 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
     lateinit var mAuth: FirebaseAuth
     lateinit var mCallbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var verificationId: String
-    lateinit var dialog: ProgressDialog
     lateinit var credential: PhoneAuthCredential
     lateinit var etotp: String
     lateinit var number: String
+    lateinit var dialog:ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verify)
@@ -38,16 +39,15 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
         number = intent.getStringExtra("NUMBER").toString()
         binding.tvNumber.setText(number)
 
-        dialog= ProgressDialog(this)
-        dialog.setMessage("Sending Otp ...")
-        dialog.show()
+       dialog= progresDialog(this,"Sending Otp...")
+
         mAuth = FirebaseAuth.getInstance()
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
                 Log.d("TESTLOG : oncomplete ",p0.smsCode)
             }
             override fun onVerificationFailed(p0: FirebaseException) {
-                dialog.hide()
+                dialog.dismiss()
                 Log.d("TESTLOG : oncomplete ",p0.message.toString())
                 Toast.makeText(
                     this@OtpVerify,
@@ -58,7 +58,7 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
             }
 
             override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-                dialog.hide()
+                dialog.dismiss()
                 verificationId = p0
             }
         }

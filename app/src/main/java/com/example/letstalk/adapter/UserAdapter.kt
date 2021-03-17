@@ -9,11 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.letstalk.Activity.ChatActivity
 import com.example.letstalk.Activity.MainActivity
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.placeHolder
 import com.example.letstalk.model.Users
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,16 +28,11 @@ class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
     inner class userViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(users: Users, lMsg: String, lTime: String) {
-            val circularProgressDrawable = CircularProgressDrawable(cont)
-            circularProgressDrawable.strokeWidth = 12f
-            circularProgressDrawable.centerRadius = 50f
-            circularProgressDrawable.start()
             val ivImage = itemView.findViewById<ImageView>(R.id.iv_userImage)
             itemView.findViewById<TextView>(R.id.tv_name).text = users.name
             itemView.findViewById<TextView>(R.id.tv_lastMsg).text = lMsg
             itemView.findViewById<TextView>(R.id.tv_time).text = lTime
-            Glide.with(cont).load(users.imageUrl).placeholder(circularProgressDrawable)
-                .into(ivImage)
+            Glide.with(cont).load(users.imageUrl).placeholder(placeHolder(cont)).into(ivImage)
         }
     }
 
@@ -65,7 +60,6 @@ class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
             intent.putExtra("name", user.name)
             intent.putExtra("imageUrl", user.imageUrl)
             intent.putExtra("uid", user.uid)
-            intent.putExtra("currentUser", user.currentUser)
             cont.startActivity(intent)
         }
     }

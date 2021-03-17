@@ -1,6 +1,5 @@
 package com.example.letstalk.Uitil
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -11,9 +10,7 @@ object AppLog {
         if (BuildConfig.DEBUG)
             Log.d("TESTLOG", "value : $value")
     }
-
-    fun makeToast(context: Context, message: String) {
-        Toast.makeText(context,message,Toast.LENGTH_LONG).show()
-    }
-
+}
+fun makeToast(context: Context, message: String) {
+    Toast.makeText(context,message,Toast.LENGTH_LONG).show()
 }

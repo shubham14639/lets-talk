@@ -1,6 +1,5 @@
 package com.example.letstalk.Activity
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.Uitil.progresDialog
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
 import com.google.firebase.auth.FirebaseAuth
@@ -17,12 +18,11 @@ import com.google.firebase.storage.FirebaseStorage
 
 class SetupUserProfile : AppCompatActivity() {
     lateinit var binding: ActivitySetupUserProfileBinding
-
     var auth: FirebaseAuth? = null
     var database: FirebaseDatabase? = null
     var storage: FirebaseStorage? = null
     var selectedImage: Uri? = null
-    lateinit var dialoge: ProgressDialog
+    var isUserExist: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +35,6 @@ class SetupUserProfile : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
-        dialoge = ProgressDialog(this)
-        dialoge.setMessage("Loading Profile Please Wait")
-        dialoge.setCancelable(false)
-        dialoge.show()
         checkUserExist()
         supportActionBar?.hide()
         binding.imageView.setOnClickListener {
@@ -48,16 +44,18 @@ class SetupUserProfile : AppCompatActivity() {
             startActivityForResult(intent, 22)
         }
         binding.continueBtn.setOnClickListener {
-            if (checkUserExist()) {
-                startActivity(Intent(this, MainActivity::class.java))
-            } else {
-                val name = binding.nameBox.text.toString()
-                if (name.isEmpty() || selectedImage == null) {
-                    Toast.makeText(this, "Please Enter Valid Details", Toast.LENGTH_LONG).show()
-                    binding.nameBox.error = "Please type a name"
+            val name = binding.nameBox.text.toString()
+            if (name.isNotEmpty() || selectedImage != null) {
+                if (isUserExist == true) {
+                    createUserData(name)
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 } else {
                     createUserData(name)
                 }
+            } else {
+                binding.nameBox.setError("Name cannot be empty")
+                Toast.makeText(this, "Please Enter Valid Details", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -70,31 +68,38 @@ class SetupUserProfile : AppCompatActivity() {
         }
     }
 
-    fun checkUserExist(): Boolean {
+
+    fun checkUserExist() {
+        isUserExist = false
+        val dialog = progresDialog(this, "Please wait..")
         val ref = database!!.getReference("users").child(auth?.uid!!)
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val user: Users? = snapshot.getValue(Users::class.java)
-                Log.d("TESTLOG", "User data is " + user!!.name)
-                Glide.with(this@SetupUserProfile).load(user.imageUrl).into(binding.imageView)
-                binding.nameBox.setText(user.name)
-                dialoge.hide()
+                if (snapshot.exists()) {
+                    isUserExist = true
+                    val user: Users? = snapshot.getValue(Users::class.java)
+                    Log.d("TESTLOG", "User data is " + user!!.name)
+                    Glide.with(this@SetupUserProfile).load(user.imageUrl)
+                        .placeholder(placeHolder(this@SetupUserProfile)).into(binding.imageView)
+                    binding.nameBox.setText(user.name)
+                    dialog.dismiss()
+                } else {
+                    isUserExist = false
+                    dialog.dismiss()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                dialoge.hide()
+                dialog.dismiss()
+                isUserExist = false
                 Log.d("TESTLOG", "user exits" + error.message)
             }
         })
-        return true
     }
 
     fun createUserData(name: String) {
         if (selectedImage != null) {
-            val dia = ProgressDialog(this)
-            dia.setMessage("Updating Profile")
-            dia.setCancelable(false)
-            dia.show()
+            val dal = progresDialog(this, "Creating User Profile...")
             val storageRef = storage!!.reference.child("Profiles").child(auth?.uid.toString())
             storageRef.putFile(selectedImage!!).addOnCompleteListener {
                 val uid = auth!!.uid.toString()
@@ -102,22 +107,22 @@ class SetupUserProfile : AppCompatActivity() {
                 if (it.isSuccessful) {
                     storageRef.getDownloadUrl().addOnCompleteListener {
                         val imageurl = it.result.toString()
-                        val users = Users(uid, name, phone, imageurl, "")
+                        val users = Users(uid, name, phone, imageurl)
                         database?.reference?.child("users")?.child(uid)?.setValue(users)
                             ?.addOnCompleteListener {
-                                dia.dismiss()
+                                dal.dismiss()
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                             }
                     }
                 } else {
-                    val user = Users(uid, name, phone, "No Image", "")
+                    val user = Users(uid, name, phone, "No Image")
                     database!!.reference
                         .child("users")
                         .child(uid)
                         .setValue(user)
                         .addOnSuccessListener {
-                            dia.dismiss()
+                            dal.dismiss()
                             startActivity(Intent(this@SetupUserProfile, MainActivity::class.java))
                             finish()
                         }

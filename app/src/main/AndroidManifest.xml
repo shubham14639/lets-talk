@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LetsTalk">
+        <activity android:name=".Activity.ProfileActivity" />
         <activity android:name=".Activity.PhoneAuthActivity" />
         <activity android:name=".Activity.ChatActivity" />
         <activity android:name=".Activity.SetupUserProfile" />
@@ -24,6 +25,7 @@
         <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,4 +38,5 @@
             </intent-filter>
         </service>
     </application>
+
 </manifest>
