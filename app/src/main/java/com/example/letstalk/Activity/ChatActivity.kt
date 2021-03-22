@@ -23,6 +23,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var database: FirebaseDatabase
     lateinit var auth: FirebaseAuth
     lateinit var storage: FirebaseStorage
+    lateinit var reference: DatabaseReference
     lateinit var messageAdapter: MessageAdapter
     lateinit var messageList: ArrayList<Messages>
     lateinit var senderRoom: String
@@ -37,6 +38,7 @@ class ChatActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
+        reference = database.getReference()
         storage = FirebaseStorage.getInstance()
         messageList = ArrayList()
         messageAdapter = MessageAdapter(this@ChatActivity, messageList)
@@ -55,7 +57,7 @@ class ChatActivity : AppCompatActivity() {
 
         senderRoom = "$senderName --->>> $reciverName"
         reciverRoom = "$reciverName <<<--- $senderName"
-
+        listenMessages()
 
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
@@ -115,21 +117,28 @@ class ChatActivity : AppCompatActivity() {
         AppLog.logger("Currend Date is ${DateUitil.currentTime}")
         database.getReference().child("lastUpdate").updateChildren(lastMsg as Map<String, Any>)
         binding.etChatMsg.setText("")
-        database.getReference().child("Messages")
+        reference.child("chats").child(senderRoom).child("Messages")
             .push()
             .setValue(message).addOnCompleteListener {
+                reference.child("chats").child(reciverRoom).child("Messages")
+                    .push()
+                    .setValue(message).addOnCompleteListener {
+
+                    }
             }
     }
 
     private fun listenMessages() {
-        val ref = database.getReference().child("Messages")
+        AppLog.logger("On listen message called$senderRoom")
+        val ref = reference.child("chats").child(senderRoom).child("Messages")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messageList.clear()
                 for (snap in snapshot.children) {
+                    AppLog.logger("snap value ${snap.value}")
                     val chat: Messages? = snap.getValue(Messages::class.java)
                     if (chat != null) {
-                        if (chat.reciverId == FirebaseAuth.getInstance().uid) {
+                        if (chat.reciverId != chat.senderId) {
                             messageList.add(chat)
                         } else
                             messageList.add(chat)
@@ -150,37 +159,3 @@ class ChatActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 }
-
-// Code of set Background Image of layout using glide
-/*     Glide.with(this).load(imageUrl).into(object :
-         CustomTarget<Drawable>() {
-         override fun onLoadCleared(placeholder: Drawable?) {
-         Log.d("TESTLOG","onload cleard")
-         }
-
-         override fun onResourceReady(
-             resource: Drawable,
-             transition: Transition<in Drawable>?
-         ) {
-             binding.mainLayout.background = resource
-         }
-     })*/
-
-/*        database.getReference()
-            .child("chats")
-            .child(senderRoom)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    messageList.clear()
-                    for (snap: DataSnapshot in snapshot.children) {
-                        Log.d("TESTLOG", snap.key!!)
-                        val messages: Messages? = snap.getValue(Messages::class.java)
-                        messageList.add(messages!!)
-                    }
-                    messageAdapter.notifyDataSetChanged()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ChatActivity, error.message, Toast.LENGTH_LONG).show()
-                }
-            })*/

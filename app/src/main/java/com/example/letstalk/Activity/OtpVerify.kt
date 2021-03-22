@@ -28,7 +28,7 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
     lateinit var credential: PhoneAuthCredential
     lateinit var etotp: String
     lateinit var number: String
-    lateinit var dialog:ProgressDialog
+    lateinit var dialog: ProgressDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_otp_verify)
@@ -39,16 +39,17 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
         number = intent.getStringExtra("NUMBER").toString()
         binding.tvNumber.setText(number)
 
-       dialog= progresDialog(this,"Sending Otp...")
+        dialog = progresDialog(this, "Sending Otp...")
 
         mAuth = FirebaseAuth.getInstance()
         mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-                Log.d("TESTLOG : oncomplete ",p0.smsCode)
+                Log.d("TESTLOG : oncomplete ", p0.smsCode)
             }
+
             override fun onVerificationFailed(p0: FirebaseException) {
                 dialog.dismiss()
-                Log.d("TESTLOG : oncomplete ",p0.message.toString())
+                Log.d("TESTLOG : oncomplete ", p0.message.toString())
                 Toast.makeText(
                     this@OtpVerify,
                     "Verification Failed" + p0.message,
@@ -73,6 +74,7 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
         }
         binding.submit.setOnClickListener {
             if (isFieldValid()) {
+                dialog = progresDialog(this, "Verify User Please Wait...")
                 verifyCode(etotp)
             }
         }
@@ -94,12 +96,13 @@ class OtpVerify : AppCompatActivity(), TextWatcher {
     }
 
     private fun signInwithCredentials(credential: PhoneAuthCredential) {
-
         mAuth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
+                dialog.dismiss()
                 startActivity(Intent(this, SetupUserProfile::class.java))
                 finishAffinity()
             } else {
+                dialog.dismiss()
                 Toast.makeText(this, "Invalid Otp", Toast.LENGTH_LONG).show()
             }
         }
