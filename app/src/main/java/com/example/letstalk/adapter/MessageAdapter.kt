@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
+import com.example.letstalk.Uitil.AppLog
 import com.example.letstalk.Uitil.placeHolder
 import com.example.letstalk.model.Messages
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +32,8 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
-                    placeHolder(context))
+                    placeHolder(context)
+                )
                     .into(imageSend)
             } else {
                 imageSend.visibility = View.GONE
@@ -51,7 +52,8 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
-                    placeHolder(context))
+                    placeHolder(context)
+                )
                     .into(imageRecive)
             } else {
                 imageRecive.visibility = View.GONE
@@ -82,8 +84,9 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.javaClass == SendViewHolder::class.java) {
             (holder as (SendViewHolder)).bind(messageList[position])
-        } else
+        } else {
             (holder as (ReciveViewHolder)).bind(messageList[position])
+        }
     }
 
     override fun getItemCount(): Int {

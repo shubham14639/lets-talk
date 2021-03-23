@@ -1,6 +1,7 @@
 package com.example.letstalk.Activity
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -97,10 +98,6 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        listenMessages()
-        super.onStart()
-    }
 
     @SuppressLint("SimpleDateFormat")
     private fun sendMessages(
@@ -129,19 +126,18 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenMessages() {
-        AppLog.logger("On listen message called$senderRoom")
         val ref = reference.child("chats").child(senderRoom).child("Messages")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messageList.clear()
                 for (snap in snapshot.children) {
-                    AppLog.logger("snap value ${snap.value}")
                     val chat: Messages? = snap.getValue(Messages::class.java)
                     if (chat != null) {
                         if (chat.reciverId != chat.senderId) {
                             messageList.add(chat)
-                        } else
+                        } else{
                             messageList.add(chat)
+                        }
                         messageAdapter.notifyDataSetChanged()
                         binding.chatRecylerview.smoothScrollToPosition(messageList.size)
                     }
