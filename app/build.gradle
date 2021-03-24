@@ -20,16 +20,39 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    flavorDimensions "dev"
+
+    def BASE_URL="BASE_URL"
+    productFlavors{
+        sender{
+            dimension "dev"
+            applicationIdSuffix ".sender"
+            buildConfigField "String",BASE_URL,'"https://sender.com"'
+        }
+        reciver{
+            dimension "dev"
+            applicationIdSuffix ".reciver"
+        }
+    }
+
+
+
+
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        customDebug{
+            initWith debug
+            applicationIdSuffix ".customDebug"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
