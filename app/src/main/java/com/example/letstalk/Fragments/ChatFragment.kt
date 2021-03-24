@@ -88,8 +88,8 @@ class ChatFragment : Fragment() {
         reciverName: String?,
         imageUrl: String?
     ) {
-        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!)
-        message.imageUrl = imageUrl!!
+        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!,"")
+        message.attachImage = imageUrl!!
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
         lastMsg.put("lastMsgTime", DateUitil.currentTime)

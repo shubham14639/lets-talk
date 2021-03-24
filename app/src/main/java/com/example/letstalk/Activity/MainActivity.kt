@@ -13,6 +13,7 @@ import com.example.letstalk.Uitil.makeToast
 import com.example.letstalk.Uitil.progresDialog
 import com.example.letstalk.adapter.UserAdapter
 import com.example.letstalk.databinding.ActivityMainBinding
+import com.example.letstalk.model.TestUser
 import com.example.letstalk.model.Users
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var databaseReference: DatabaseReference
     lateinit var auth: FirebaseAuth
     lateinit var userAdapter: UserAdapter
-    lateinit var userList: ArrayList<Users>
+    lateinit var userList: ArrayList<TestUser>
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (snap: DataSnapshot in snapshot.children) {
-                    val user: Users? = snap.getValue(Users::class.java)
+                    val user: TestUser? = snap.getValue(TestUser::class.java)
                     if (!user!!.uid.equals(FirebaseAuth.getInstance().uid))
                         userList.add(user)
                     userAdapter = UserAdapter(this@MainActivity, userList)
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                AppLog.logger(error.message)
+                AppLog.logger("onMainActivity :${error.message}")
                 dialog.dismiss()
             }
         })

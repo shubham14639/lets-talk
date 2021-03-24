@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
 import com.example.letstalk.Uitil.placeHolder
@@ -31,7 +30,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             if (messages.message.equals("Images")) {
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
+                Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
                     placeHolder(context))
                     .into(imageSend)
             } else {
@@ -50,7 +49,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             if (messages.message.equals("Images")) {
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
+                Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
                     placeHolder(context))
                     .into(imageRecive)
             } else {

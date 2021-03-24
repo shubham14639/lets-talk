@@ -14,20 +14,21 @@ import com.example.letstalk.Activity.ChatActivity
 import com.example.letstalk.Activity.MainActivity
 import com.example.letstalk.R
 import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.model.TestUser
 import com.example.letstalk.model.Users
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
+class UserAdapter(mainActivity: MainActivity, users: ArrayList<TestUser>) :
     RecyclerView.Adapter<UserAdapter.userViewHolder>() {
     var cont: Context = mainActivity
-    var users: ArrayList<Users>? = users
+    var users: ArrayList<TestUser>? = users
 
     inner class userViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(users: Users, lMsg: String, lTime: String) {
+        fun bind(users: TestUser, lMsg: String, lTime: String) {
             val ivImage = itemView.findViewById<ImageView>(R.id.iv_userImage)
             itemView.findViewById<TextView>(R.id.tv_name).text = users.name
             itemView.findViewById<TextView>(R.id.tv_lastMsg).text = lMsg
@@ -60,6 +61,7 @@ class UserAdapter(mainActivity: MainActivity, users: ArrayList<Users>) :
             intent.putExtra("name", user.name)
             intent.putExtra("imageUrl", user.imageUrl)
             intent.putExtra("uid", user.uid)
+            intent.putExtra("user", users)
             cont.startActivity(intent)
         }
     }

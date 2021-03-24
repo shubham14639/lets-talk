@@ -105,14 +105,13 @@ class ChatActivity : AppCompatActivity() {
         senderName: String?,
         msgTxt: String,
         reciverName: String?,
-        imageUrl: String?
+        attachedImage: String?
     ) {
-        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!)
-        message.imageUrl = imageUrl!!
+        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!,"")
+        message.attachImage = attachedImage!!
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
         lastMsg.put("lastMsgTime", DateUitil.currentTime)
-        AppLog.logger("Currend Date is ${DateUitil.currentTime}")
         database.getReference().child("lastUpdate").updateChildren(lastMsg as Map<String, Any>)
         binding.etChatMsg.setText("")
         database.getReference().child("Messages")
