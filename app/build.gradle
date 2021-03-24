@@ -35,6 +35,7 @@ android {
         reciver{
             dimension "dev"
             applicationIdSuffix ".reciver"
+            buildConfigField "String",BASE_URL,'"https://reciver.com"'
         }
     }
 
