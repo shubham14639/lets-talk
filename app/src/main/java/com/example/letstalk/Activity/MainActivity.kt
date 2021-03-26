@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                AppLog.logger(error.message)
+                AppLog.logger("onMainActivity :${error.message}")
                 dialog.dismiss()
             }
         })

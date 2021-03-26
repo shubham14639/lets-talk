@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:listitem="@layout/message_sent"
+        android:layout_marginTop="4dp"
         android:layout_weight="1" />
 
     <androidx.cardview.widget.CardView

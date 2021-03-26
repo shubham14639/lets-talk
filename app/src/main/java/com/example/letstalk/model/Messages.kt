@@ -5,7 +5,9 @@ class Messages {
     var reciverId: String = ""
     var message: String = ""
     var timeStamp: String = ""
-    var imageUrl:String=""
+    var attachImage: String = ""
+    var userImage: String = ""
+    var userProfile: String = ""
 
     constructor()
     constructor(
@@ -13,11 +15,15 @@ class Messages {
         message: String,
         timeStamp: String,
         reciverId: String,
+        userImage: String,
+        userProfile: String
     ) {
         this.reciverId = reciverId
         this.timeStamp = timeStamp
         this.message = message
         this.senderId = senderId
+        this.userImage = userImage
+        this.userProfile = userProfile
     }
 }
 

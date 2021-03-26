@@ -21,7 +21,7 @@ object AppStatic {
                 user?.let(onDataChange)
             }
             override fun onCancelled(error: DatabaseError) {
-                Log.d("TESTLOG", "user exits" + error.message)
+                Log.d("TESTLOG", "user does not exits" + error.message)
                 onCancelled(error)
             }
         })

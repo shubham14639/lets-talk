@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.letstalk.Uitil.AppLog
 import com.example.letstalk.Uitil.AppStatic
-import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.Uitil.place
 import com.example.letstalk.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {
@@ -19,7 +19,7 @@ class ProfileActivity : AppCompatActivity() {
             onDataChange = {
                 binding.tvName.text = it.name
                 binding.tvPhone.text = it.phone
-                Glide.with(this).load(it.imageUrl).placeholder(placeHolder(this))
+                Glide.with(this).load(it.userProfile).placeholder(place(this))
                     .into(binding.ivProfile)
             },
             onCancelled = {

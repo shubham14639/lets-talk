@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
-import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.Uitil.place
 import com.example.letstalk.model.Messages
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
@@ -31,13 +30,15 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             if (messages.message.equals("Images")) {
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
-                    placeHolder(context))
+                Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
+                    place(context)
+                )
                     .into(imageSend)
             } else {
                 imageSend.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
+                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }
@@ -50,13 +51,15 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             if (messages.message.equals("Images")) {
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
-                Glide.with(context.applicationContext).load(messages.imageUrl).placeholder(
-                    placeHolder(context))
+                Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
+                    place(context)
+                )
                     .into(imageRecive)
             } else {
                 imageRecive.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
+                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }

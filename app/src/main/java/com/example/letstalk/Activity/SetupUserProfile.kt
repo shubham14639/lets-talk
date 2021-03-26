@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
-import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.Uitil.place
 import com.example.letstalk.Uitil.progresDialog
 import com.example.letstalk.databinding.ActivitySetupUserProfileBinding
 import com.example.letstalk.model.Users
@@ -79,8 +79,8 @@ class SetupUserProfile : AppCompatActivity() {
                     isUserExist = true
                     val user: Users? = snapshot.getValue(Users::class.java)
                     Log.d("TESTLOG", "User data is " + user!!.name)
-                    Glide.with(this@SetupUserProfile).load(user.imageUrl)
-                        .placeholder(placeHolder(this@SetupUserProfile)).into(binding.imageView)
+                    Glide.with(this@SetupUserProfile).load(user.userProfile)
+                        .placeholder(place(this@SetupUserProfile)).into(binding.imageView)
                     binding.nameBox.setText(user.name)
                     dialog.dismiss()
                 } else {
