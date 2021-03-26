@@ -71,7 +71,7 @@ class ChatFragment : Fragment() {
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
             if (msgTxt.isNotEmpty()) {
-                sendMessages(senderName, msgTxt, reciverName, imageUrl)
+          //      sendMessages(senderName, msgTxt, reciverName, imageUrl)
             } else makeToast(requireContext(), "type a message")
         }
         binding.ivAttach.setOnClickListener {
@@ -82,13 +82,13 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun sendMessages(
+   /* private fun sendMessages(
         senderName: String?,
         msgTxt: String,
         reciverName: String?,
         imageUrl: String?
     ) {
-        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!,"")
+        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!,"","")
         message.attachImage = imageUrl!!
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
@@ -100,7 +100,7 @@ class ChatFragment : Fragment() {
             .push()
             .setValue(message).addOnCompleteListener {
             }
-    }
+    }*/
 
     @SuppressLint("SimpleDateFormat")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -117,7 +117,7 @@ class ChatFragment : Fragment() {
                         val filePath = it.result.toString()
                         val senderName = auth.uid
                         val msgTxt = "Images"
-                        sendMessages(senderName, msgTxt, reciverName, filePath)
+                      //  sendMessages(senderName, msgTxt, reciverName, filePath)
                     }
                 }
             }
@@ -125,7 +125,7 @@ class ChatFragment : Fragment() {
     }
 
     override fun onStart() {
-        listenMessages()
+       // listenMessages()
         super.onStart()
     }
 

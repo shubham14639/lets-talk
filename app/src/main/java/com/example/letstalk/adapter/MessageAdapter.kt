@@ -31,12 +31,14 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    placeHolder(context))
+                    placeHolder(context)
+                )
                     .into(imageSend)
             } else {
                 imageSend.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
+                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }
@@ -50,12 +52,14 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    placeHolder(context))
+                    placeHolder(context)
+                )
                     .into(imageRecive)
             } else {
                 imageRecive.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
+                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }

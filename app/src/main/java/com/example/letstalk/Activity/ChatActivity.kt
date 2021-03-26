@@ -28,6 +28,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var senderRoom: String
     lateinit var reciverRoom: String
     lateinit var reciverName: String
+    lateinit var userProfile: String
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +58,9 @@ class ChatActivity : AppCompatActivity() {
         reciverRoom = "$reciverName <<<--- $senderName"
 
 
+        DataClass.userDetails {
+            userProfile = it.imageUrl
+        }
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
             if (msgTxt.isNotEmpty()) {
@@ -107,7 +111,8 @@ class ChatActivity : AppCompatActivity() {
         reciverName: String?,
         attachedImage: String?
     ) {
-        val message = Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!,"")
+        val message =
+            Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!, "", userProfile)
         message.attachImage = attachedImage!!
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
