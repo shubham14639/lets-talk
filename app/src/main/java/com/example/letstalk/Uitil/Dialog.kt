@@ -15,13 +15,11 @@ class DataClass {
         inline fun userDetails(crossinline onDataChanged: (value: Users) -> Unit) {
             val database = FirebaseDatabase.getInstance()
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
-            val ref = database.getReference("users")
+            val ref = database.getReference("users").child(auth.uid!!)
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    for (snap in snapshot.children) {
-                        val users: Users? = snap.getValue(Users::class.java)
-                        onDataChanged(users!!)
-                    }
+                    val user=snapshot.getValue(Users::class.java)
+                    onDataChanged(user!!)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -40,10 +38,10 @@ fun progresDialog(context: Context, msg: String): ProgressDialog {
     return dialog
 }
 
-fun placeHolder(cont: Context): CircularProgressDrawable {
+fun place(cont: Context): CircularProgressDrawable {
     val circularProgressDrawable = CircularProgressDrawable(cont)
-    circularProgressDrawable.strokeWidth = 12f
-    circularProgressDrawable.centerRadius = 50f
+    circularProgressDrawable.strokeWidth = 8f
+    circularProgressDrawable.centerRadius = 2f
     circularProgressDrawable.start()
     return circularProgressDrawable
 }

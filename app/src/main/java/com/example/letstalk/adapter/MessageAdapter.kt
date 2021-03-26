@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.letstalk.R
-import com.example.letstalk.Uitil.placeHolder
+import com.example.letstalk.Uitil.place
 import com.example.letstalk.model.Messages
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
@@ -31,7 +31,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    placeHolder(context)
+                    place(context)
                 )
                     .into(imageSend)
             } else {
@@ -52,7 +52,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    placeHolder(context)
+                    place(context)
                 )
                     .into(imageRecive)
             } else {

@@ -1,6 +1,7 @@
 package com.example.letstalk.Activity
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -28,7 +29,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var senderRoom: String
     lateinit var reciverRoom: String
     lateinit var reciverName: String
-    lateinit var userProfile: String
+    lateinit var setProfile: String
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,8 @@ class ChatActivity : AppCompatActivity() {
 
 
         DataClass.userDetails {
-            userProfile = it.imageUrl
+            setProfile = it.userProfile
+            AppLog.logger("profile is $setProfile")
         }
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
@@ -112,7 +114,7 @@ class ChatActivity : AppCompatActivity() {
         attachedImage: String?
     ) {
         val message =
-            Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!, "", userProfile)
+            Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!, "", setProfile)
         message.attachImage = attachedImage!!
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
