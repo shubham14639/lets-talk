@@ -27,18 +27,18 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             val imageSend = itemView.findViewById<ImageView>(R.id.iv_pic_send)
             val userPic = itemView.findViewById<ImageView>(R.id.iv_userSend_profile)
             val msg = itemView.findViewById<TextView>(R.id.tv_msg_send)
-            if (messages.message.equals("Images")) {
+            Glide.with(context).load(messages.userProfile).into(userPic)
+            if (messages.message.equals("Picture")) {
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    place(context)
+                    place(context,10f,40f)
                 )
                     .into(imageSend)
             } else {
                 imageSend.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
-                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }
@@ -48,7 +48,8 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
             val imageRecive = itemView.findViewById<ImageView>(R.id.iv_pic_recive)
             val userPic = itemView.findViewById<ImageView>(R.id.iv_userRecive_profile)
             val msg = itemView.findViewById<TextView>(R.id.tv_msg_recive)
-            if (messages.message.equals("Images")) {
+            Glide.with(context).load(messages.userProfile).into(userPic)
+            if (messages.message.equals("Picture")) {
                 imageRecive.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
@@ -59,7 +60,6 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageRecive.visibility = View.GONE
                 msg.visibility = View.VISIBLE
                 msg.text = messages.message
-                Glide.with(context).load(messages.userProfile).into(userPic)
             }
         }
     }

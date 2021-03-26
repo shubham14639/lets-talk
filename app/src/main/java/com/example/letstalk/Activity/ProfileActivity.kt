@@ -19,7 +19,7 @@ class ProfileActivity : AppCompatActivity() {
             onDataChange = {
                 binding.tvName.text = it.name
                 binding.tvPhone.text = it.phone
-                Glide.with(this).load(it.userProfile).placeholder(place(this))
+                Glide.with(this).load(it.userProfile).placeholder(place(this,5f,20f))
                     .into(binding.ivProfile)
             },
             onCancelled = {

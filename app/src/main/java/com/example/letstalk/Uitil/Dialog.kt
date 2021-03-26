@@ -38,10 +38,10 @@ fun progresDialog(context: Context, msg: String): ProgressDialog {
     return dialog
 }
 
-fun place(cont: Context): CircularProgressDrawable {
+fun place(cont: Context, strokeWidth: Float =5f, centerRadius: Float=40f): CircularProgressDrawable {
     val circularProgressDrawable = CircularProgressDrawable(cont)
-    circularProgressDrawable.strokeWidth = 8f
-    circularProgressDrawable.centerRadius = 2f
+    circularProgressDrawable.strokeWidth = strokeWidth
+    circularProgressDrawable.centerRadius = centerRadius
     circularProgressDrawable.start()
     return circularProgressDrawable
 }

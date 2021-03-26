@@ -1,7 +1,6 @@
 package com.example.letstalk.Activity
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -29,7 +28,8 @@ class ChatActivity : AppCompatActivity() {
     lateinit var senderRoom: String
     lateinit var reciverRoom: String
     lateinit var reciverName: String
-    lateinit var setProfile: String
+    lateinit var userProfile: String
+    lateinit var filePath: String
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +60,17 @@ class ChatActivity : AppCompatActivity() {
 
 
         DataClass.userDetails {
-            setProfile = it.userProfile
-            AppLog.logger("profile is $setProfile")
+            userProfile = it.userProfile
         }
         binding.btnSend.setOnClickListener {
             val msgTxt = binding.etChatMsg.text.toString()
             if (msgTxt.isNotEmpty()) {
-                sendMessages(senderName, msgTxt, reciverName, imageUrl)
+                sendMessages(
+                    senderName = senderName,
+                    msgTxt = msgTxt,
+                    reciverName = reciverName,
+                    filePath = "File doest not Attached"
+                )
             } else Toast.makeText(this, "type a message", Toast.LENGTH_LONG).show()
         }
 
@@ -85,19 +89,24 @@ class ChatActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == RESULT_OK) {
             val uri = data?.data
-            val storageReference =
-                storage.getReference().child("chats").child(DateUitil.currentTime)
-            storageReference.putFile(uri!!).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    storageReference.downloadUrl.addOnCompleteListener {
-                        dialog.dismiss()
-                        val filePath = it.result.toString()
-                        val senderName = auth.uid
-                        val msgTxt = "Images"
-                        sendMessages(senderName, msgTxt, reciverName, filePath)
+            if (uri != null) {
+                val storageReference =
+                    storage.getReference().child("chats").child(DateUitil.currentTime)
+                storageReference.putFile(uri).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        storageReference.downloadUrl.addOnCompleteListener {
+                            dialog.dismiss()
+                            filePath = it.result.toString()
+                            sendMessages(
+                                senderName = auth.uid,
+                                msgTxt = "Picture",
+                                reciverName = reciverName,
+                                filePath = filePath
+                            )
+                        }
                     }
                 }
-            }
+            } else makeToast(this, "file does not attached")
         }
     }
 
@@ -106,16 +115,20 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun sendMessages(
         senderName: String?,
         msgTxt: String,
         reciverName: String?,
-        attachedImage: String?
+        filePath: String
     ) {
-        val message =
-            Messages(senderName!!, msgTxt, DateUitil.currentTime, reciverName!!, "", setProfile)
-        message.attachImage = attachedImage!!
+        val message = Messages(
+            senderId = senderName!!,
+            message = msgTxt,
+            timeStamp = DateUitil.currentTime,
+            reciverId = reciverName!!,
+            attachImage = filePath,
+            userProfile = userProfile
+        )
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
         lastMsg.put("lastMsgTime", DateUitil.currentTime)

@@ -56,7 +56,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -64,6 +65,15 @@
                     android:layout_height="wrap_content"
                     android:text="8:23"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_msg_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

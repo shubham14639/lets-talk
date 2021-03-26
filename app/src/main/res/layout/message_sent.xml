@@ -42,7 +42,10 @@
                         android:id="@+id/iv_pic_send"
                         android:layout_width="250dp"
                         android:layout_height="250dp"
+                        android:layout_margin="8dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:src="@drawable/avatar"
                         android:visibility="gone" />
                 </LinearLayout>
 

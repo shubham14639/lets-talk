@@ -24,36 +24,13 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    flavorDimensions "dev"
-
-    def BASE_URL="BASE_URL"
-    productFlavors{
-        sender{
-            dimension "dev"
-            applicationIdSuffix ".sender"
-            buildConfigField "String",BASE_URL,'"https://sender.com"'
-        }
-        reciver{
-            dimension "dev"
-            applicationIdSuffix ".reciver"
-            buildConfigField "String",BASE_URL,'"https://reciver.com"'
-        }
-    }
-
-
-
-
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        customDebug{
-            initWith debug
-            applicationIdSuffix ".customDebug"
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+
 
     }
     compileOptions {
