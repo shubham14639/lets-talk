@@ -72,8 +72,8 @@ class MainActivity : AppCompatActivity() {
                     binding.recyclerView.let {
                         it.layoutManager = LinearLayoutManager(this@MainActivity)
                         it.adapter = userAdapter
+                        dialog.dismiss()
                     }
-                    dialog.dismiss()
                 }
             }
 

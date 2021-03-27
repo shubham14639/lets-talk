@@ -80,7 +80,7 @@ class SetupUserProfile : AppCompatActivity() {
                     val user: Users? = snapshot.getValue(Users::class.java)
                     Log.d("TESTLOG", "User data is " + user!!.name)
                     Glide.with(this@SetupUserProfile).load(user.userProfile)
-                        .placeholder(place(this@SetupUserProfile)).into(binding.imageView)
+                        .placeholder(place(this@SetupUserProfile,10f,30f)).into(binding.imageView)
                     binding.nameBox.setText(user.name)
                     dialog.dismiss()
                 } else {

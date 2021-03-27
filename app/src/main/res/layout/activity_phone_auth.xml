@@ -26,17 +26,17 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Verify Phone Number"
+            android:text="@string/verify_phone_number"
             android:textSize="28sp" />
 
         <EditText
             android:id="@+id/et_phone"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:maxLength="10"
-            android:hint="Enter Valid Phone Number"
+            android:hint="@string/enter_valid_phone_number"
             android:inputType="number"
             android:textColor="@color/black"
             tools:ignore="TextFields" />
@@ -47,6 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="Continue" />
+            android:text="@string/contiue" />
     </LinearLayout>
 </LinearLayout>

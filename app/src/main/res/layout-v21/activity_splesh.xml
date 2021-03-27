@@ -21,7 +21,7 @@
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:letterSpacing=".04"
-        android:text="Welcome to Let's Talk"
+        android:text="@string/welcome_to_let_s_talk"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="normal"

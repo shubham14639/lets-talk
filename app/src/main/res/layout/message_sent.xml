@@ -35,7 +35,7 @@
                         android:layout_gravity="end"
                         android:layout_margin="4dp"
                         android:background="#D8D5EAF3"
-                        android:text="Send Message"
+                        android:text="@string/send_message"
                         android:textSize="20sp" />
 
                     <ImageView

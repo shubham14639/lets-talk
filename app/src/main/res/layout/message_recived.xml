@@ -46,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
                         android:background="#F8F5E0"
-                        android:text="Recived Message"
+                        android:text="@string/recived_message"
                         android:textSize="20sp" />
 
                     <ImageView
