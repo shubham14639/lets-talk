@@ -1,4 +1,4 @@
 package com.example.letstalk.model
 
-class NotificationData {
-}
+data class NotificationData(val title: String, val message: String)
+
