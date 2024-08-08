@@ -11,7 +11,7 @@ class Users {
         uid: String,
         name: String,
         phone: String,
-        userProfile: String,
+        userProfile: String
     ) {
         this.uid = uid
         this.name = name
