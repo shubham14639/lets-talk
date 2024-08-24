@@ -45,7 +45,7 @@ class SetupUserProfile : AppCompatActivity() {
         }
         binding.continueBtn.setOnClickListener {
             val name = binding.nameBox.text.toString()
-            if (name.isNotEmpty() || selectedImage != null) {
+            if (name.isNotEmpty()) {
                 if (isUserExist == true) {
                     createUserData(name)
                     startActivity(Intent(this, MainActivity::class.java))
