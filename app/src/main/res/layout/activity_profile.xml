@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="@color/white"
     tools:context=".Activity.ProfileActivity">
 
@@ -12,10 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        app:cardBackgroundColor="#E0F1FA"
         app:cardElevation="8dp">
 
         <LinearLayout
@@ -59,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/purple_200"
                 android:layout_marginBottom="8dp"
                 android:text="logout" />
         </LinearLayout>
