@@ -20,6 +20,7 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         AppStatic.checkUserExist(
+            this,
             onDataChange = {
                 binding.tvName.text = it.name
                 binding.tvPhone.text = it.phone

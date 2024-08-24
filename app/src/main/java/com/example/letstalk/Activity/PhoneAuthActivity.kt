@@ -33,7 +33,7 @@ class PhoneAuthActivity : AppCompatActivity() {
                 Toast.makeText(this, "Enter Valid Phone Number", Toast.LENGTH_LONG).show()
             } else {
                 val number = "+91" + n
-                val intent = Intent(this, OtpVerify::class.java)
+                val intent = Intent(this, OtpVerifyActivity::class.java)
                 intent.putExtra("NUMBER", number)
                 startActivity(intent)
             }

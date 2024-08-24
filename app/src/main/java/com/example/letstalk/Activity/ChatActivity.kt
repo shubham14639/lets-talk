@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,12 +22,10 @@ import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
 
 const val TOPIC = "/topics/myTopic2"
 
@@ -77,7 +76,7 @@ class ChatActivity : AppCompatActivity() {
         reciverRoom = "$reciverName <<<--- $senderName"
 
         DataClass.userDetails {
-            users=it
+            users = it
         }
 
         binding.btnSend.setOnClickListener {
@@ -89,6 +88,9 @@ class ChatActivity : AppCompatActivity() {
                     reciverName = reciverName,
                     filePath = "File doest not Attached"
                 )
+                /*send(
+                    database,senderRoom,messageList,messageAdapter,this
+                )*/
                 PushNotification(
                     NotificationData(users.name, msgTxt),
                     TOPIC
@@ -105,7 +107,8 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificaton(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+    private fun sendNotificaton(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitInstance.api.postNotification(notification)
                 if (response.isSuccessful) {
@@ -149,7 +152,12 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
     }
 
-    private fun sendMessages(senderName: String?, msgTxt: String, reciverName: String?, filePath: String) {
+    private fun sendMessages(
+        senderName: String?,
+        msgTxt: String,
+        reciverName: String?,
+        filePath: String
+    ) {
         val message = Messages(
             senderId = senderName!!,
             message = msgTxt,
@@ -158,19 +166,15 @@ class ChatActivity : AppCompatActivity() {
             attachImage = filePath,
             userProfile = users.userProfile
         )
-        val lastMsg: HashMap<String, String> = HashMap()
-        lastMsg.put("lastMsg", message.message)
-        lastMsg.put("lastMsgTime", DateUitil.currentTime)
-        database.getReference().child("lastUpdate").updateChildren(lastMsg as Map<String, Any>)
         binding.etChatMsg.setText("")
-        database.getReference().child("Messages")
+        database.getReference().child("Messages").child(reciverName)
             .push()
             .setValue(message).addOnCompleteListener {
             }
     }
 
     private fun listenMessages() {
-        val ref = database.getReference().child("Messages")
+        val ref = database.getReference().child("Messages").child(reciverName)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 messageList.clear()
@@ -214,21 +218,29 @@ class ChatActivity : AppCompatActivity() {
          }
      })*/
 
-/*        database.getReference()
-            .child("chats")
-            .child(senderRoom)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    messageList.clear()
-                    for (snap: DataSnapshot in snapshot.children) {
-                        Log.d("TESTLOG", snap.key!!)
-                        val messages: Messages? = snap.getValue(Messages::class.java)
-                        messageList.add(messages!!)
-                    }
-                    messageAdapter.notifyDataSetChanged()
+fun send(
+    database: FirebaseDatabase,
+    senderRoom: String,
+    messageList: ArrayList<Messages>,
+    messageAdapter: MessageAdapter,
+    context: Context
+) {
+    database.getReference()
+        .child("chats")
+        .child(senderRoom)
+        .addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                messageList.clear()
+                for (snap: DataSnapshot in snapshot.children) {
+                    Log.d("TESTLOG", snap.key!!)
+                    val messages: Messages? = snap.getValue(Messages::class.java)
+                    messageList.add(messages!!)
                 }
+                messageAdapter.notifyDataSetChanged()
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@ChatActivity, error.message, Toast.LENGTH_LONG).show()
-                }
-            })*/
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context, error.message, Toast.LENGTH_LONG).show()
+            }
+        })
+}

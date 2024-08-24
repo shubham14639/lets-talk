@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".Activity.PhoneAuthActivity">
 
@@ -20,9 +22,21 @@
             android:layout_gravity="center"
             android:src="@drawable/mobile_auth" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:hint="Verify your Account"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -30,139 +44,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Verify"
-                android:textSize="28sp" />
+                android:text="Code has been sent to : "
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="10dp"
                 android:text="1111111111"
-                android:textSize="28sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="@string/verify"
-            android:textSize="20sp" />
-
-        <LinearLayout
-            android:id="@+id/ll_edittext"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/baseline_add_call_24"
+            android:layout_marginTop="8dp">
 
-            <EditText
-                android:id="@+id/et_one"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:nextFocusRight="@id/et_two"
-                android:textSize="35sp"
-                android:textStyle="bold" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter valid otp"
 
-            <EditText
-                android:id="@+id/et_two"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:nextFocusRight="@id/et_three"
-                android:textSize="35sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/et_three"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:nextFocusRight="@id/et_four"
-                android:textSize="35sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/et_four"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:nextFocusRight="@id/et_five"
-                android:textSize="35sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/et_five"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:focusableInTouchMode="true"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:nextFocusRight="@id/et_six"
-                android:textSize="35sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/et_six"
-                android:layout_width="50dp"
-                android:layout_height="52dp"
-                android:layout_marginRight="5dp"
-                android:alpha="0.7"
-                android:focusable="true"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="1"
-                android:textSize="35sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
+                android:inputType="number"
+                android:maxLength="6" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/submit"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="@string/let_s_go" />
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/purple_200"
+            android:text="Verify " />
     </LinearLayout>
 
 
