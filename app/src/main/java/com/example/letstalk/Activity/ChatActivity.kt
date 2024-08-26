@@ -203,20 +203,6 @@ class ChatActivity : AppCompatActivity() {
     }
 }
 
-// Code of set Background Image of layout using glide
-/*     Glide.with(this).load(imageUrl).into(object :
-         CustomTarget<Drawable>() {
-         override fun onLoadCleared(placeholder: Drawable?) {
-         Log.d("TESTLOG","onload cleard")
-         }
-
-         override fun onResourceReady(
-             resource: Drawable,
-             transition: Transition<in Drawable>?
-         ) {
-             binding.mainLayout.background = resource
-         }
-     })*/
 
 fun send(
     database: FirebaseDatabase,
