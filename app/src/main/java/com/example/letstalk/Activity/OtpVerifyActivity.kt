@@ -48,7 +48,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                 Log.d("TESTLOG : oncomplete ", p0.message.toString())
                 Toast.makeText(
                     this@OtpVerifyActivity,
-                    "Verification Failed" + p0.message,
+                    "OTP Verification Failed" + p0.message,
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -63,7 +63,7 @@ class OtpVerifyActivity : AppCompatActivity() {
 
         binding.submit.setOnClickListener {
             if (binding.etOtp.text.isNullOrBlank()) {
-                Toast.makeText(this, "Null or Blank is ot allowed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Null or Blank is not allowed", Toast.LENGTH_SHORT).show()
             } else {
                 verifyCode(binding.etOtp.text.toString())
             }
@@ -92,7 +92,7 @@ class OtpVerifyActivity : AppCompatActivity() {
                 startActivity(Intent(this, SetupUserProfile::class.java))
                 finishAffinity()
             } else {
-                Toast.makeText(this, "Invalid Otp", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please Enter Valid OTP", Toast.LENGTH_LONG).show()
             }
         }
     }

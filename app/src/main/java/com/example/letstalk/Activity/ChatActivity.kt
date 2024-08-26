@@ -88,9 +88,6 @@ class ChatActivity : AppCompatActivity() {
                     reciverName = reciverName,
                     filePath = "File doest not Attached"
                 )
-                /*send(
-                    database,senderRoom,messageList,messageAdapter,this
-                )*/
                 PushNotification(
                     NotificationData(users.name, msgTxt),
                     TOPIC
@@ -167,6 +164,11 @@ class ChatActivity : AppCompatActivity() {
             userProfile = users.userProfile
         )
         binding.etChatMsg.setText("")
+        val lastMsg: HashMap<String, String> = HashMap()
+        lastMsg.put("lastMsg", message.message)
+        lastMsg.put("lastMsgTime", DateUitil.currentTime)
+        database.getReference().child("users").child(reciverName).updateChildren(lastMsg as Map<String, Any>)
+
         database.getReference().child("Messages").child(reciverName)
             .push()
             .setValue(message).addOnCompleteListener {
@@ -192,7 +194,12 @@ class ChatActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                Toast.makeText(
+                    applicationContext,
+                    "Error in Database ${error.message}",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
         })
     }

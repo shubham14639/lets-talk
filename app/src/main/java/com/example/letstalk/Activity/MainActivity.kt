@@ -1,5 +1,6 @@
 package com.example.letstalk.Activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
                     }
                     R.id.ic_calls -> {
-                        makeToast(this@MainActivity, "Calls Clicks")
+                        makeToast(this@MainActivity, "In progress")
                     }
                     R.id.ic_chat -> {
                         // startActivity(Intent(this@MainActivity, ChatFragment::class.java))
@@ -63,7 +64,11 @@ class MainActivity : AppCompatActivity() {
         val dialog = progresDialog(this, "Loading Please Wait...")
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         databaseReference.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (userList!=null){
+                    userList.clear()
+                }
                 for (snap: DataSnapshot in snapshot.children) {
                     val user: Users? = snap.getValue(Users::class.java)
                     if (!user!!.uid.equals(FirebaseAuth.getInstance().uid))
@@ -75,6 +80,7 @@ class MainActivity : AppCompatActivity() {
                         dialog.dismiss()
                     }
                 }
+                userAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {

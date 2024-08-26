@@ -107,7 +107,7 @@ class SetupUserProfile : AppCompatActivity() {
                 if (it.isSuccessful) {
                     storageRef.getDownloadUrl().addOnCompleteListener {
                         val imageurl = it.result.toString()
-                        val users = Users(uid, name, phone, imageurl)
+                        val users = Users(uid, name, phone, imageurl,"","")
                         database?.reference?.child("users")?.child(uid)?.setValue(users)
                             ?.addOnCompleteListener {
                                 dal.dismiss()
@@ -116,7 +116,7 @@ class SetupUserProfile : AppCompatActivity() {
                             }
                     }
                 } else {
-                    val user = Users(uid, name, phone, "No Image")
+                    val user = Users(uid, name, phone, "No Image","","")
                     database!!.reference
                         .child("users")
                         .child(uid)
@@ -129,7 +129,7 @@ class SetupUserProfile : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(this, "Image is empty", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Image cannot found", Toast.LENGTH_LONG).show()
         }
     }
 }

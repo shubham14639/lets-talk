@@ -40,11 +40,11 @@ class UserAdapter(val context: Context,val  users: ArrayList<Users>) :
 
     override fun onBindViewHolder(holder: userViewHolder, position: Int) {
         val user = users[position]
-        val ref = FirebaseDatabase.getInstance().getReference("Messages").child(user.uid)
+        val ref = FirebaseDatabase.getInstance().getReference("users").child(user.uid)
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val lMsg = snapshot.child("message").value.toString()
-                val lTime = snapshot.child("timeStamp").value.toString()
+                val lMsg = snapshot.child("lastMsg").value.toString()
+                val lTime = snapshot.child("lastMsgTime").value.toString()
                 holder.bind(user, lMsg, lTime)
             }
 
