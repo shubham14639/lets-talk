@@ -24,6 +24,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.Map
 
 
+//this is not used
 class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     lateinit var database: FirebaseDatabase
@@ -125,8 +126,18 @@ class ChatFragment : Fragment() {
     }
 
     override fun onStart() {
-       // listenMessages()
+        listenMessages()
         super.onStart()
+    }
+
+    override fun onResume() {
+        listenMessages()
+        super.onResume()
+    }
+
+    override fun onStop() {
+        listenMessages()
+        super.onStop()
     }
 
     private fun listenMessages() {

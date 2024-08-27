@@ -149,6 +149,16 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
     }
 
+    override fun onResume() {
+        listenMessages()
+        super.onResume()
+    }
+
+    override fun onStop() {
+        listenMessages()
+        super.onStop()
+    }
+
     private fun sendMessages(
         senderName: String?,
         msgTxt: String,
@@ -161,7 +171,8 @@ class ChatActivity : AppCompatActivity() {
             timeStamp = DateUitil.currentTime,
             reciverId = reciverName!!,
             attachImage = filePath,
-            userProfile = users.userProfile
+            userProfile = users.userProfile,
+            isOutgoing = true
         )
         binding.etChatMsg.setText("")
         val lastMsg: HashMap<String, String> = HashMap()
@@ -176,19 +187,33 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenMessages() {
-        val ref = database.getReference().child("Messages").child(reciverName)
+        val ref = database.getReference().child("Messages").child(auth.uid.toString())
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("MYTAG", "onDataChange: before clear $messageList")
                 messageList.clear()
                 for (snap in snapshot.children) {
                     val chat: Messages? = snap.getValue(Messages::class.java)
                     if (chat != null) {
+                        Log.d("MYTAG", "chat reciverid  ${chat.reciverId}   uid ${FirebaseAuth.getInstance().uid}")
                         if (chat.reciverId == FirebaseAuth.getInstance().uid) {
                             messageList.add(chat)
                         } else
                             messageList.add(chat)
+                        messageList.forEach{
+                            Log.d("MYTAG", "message list for each: ${it.message}")
+                        }
+                        Log.d("MYTAG", "message list after if else  $messageList")
+                        messageAdapter = MessageAdapter(this@ChatActivity, messageList)
+                        binding.chatRecylerview.let {
+                            it.layoutManager = LinearLayoutManager(this@ChatActivity)
+                            it.adapter = messageAdapter
+                        }
                         messageAdapter.notifyDataSetChanged()
                         binding.chatRecylerview.smoothScrollToPosition(messageList.size)
+                    }else{
+                        Log.d("MYTAG", "chat is null  $messageList")
+
                     }
                 }
             }

@@ -11,8 +11,6 @@ import com.bumptech.glide.Glide
 import com.example.letstalk.R
 import com.example.letstalk.Uitil.place
 import com.example.letstalk.model.Messages
-import com.google.firebase.auth.FirebaseAuth
-import java.util.*
 
 class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -32,7 +30,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
                 imageSend.visibility = View.VISIBLE
                 msg.visibility = View.GONE
                 Glide.with(context.applicationContext).load(messages.attachImage).placeholder(
-                    place(context,10f,40f)
+                    place(context, 10f, 40f)
                 )
                     .into(imageSend)
             } else {
@@ -65,28 +63,35 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Messages>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        if (viewType == MESSAGE_SEND) {
+        return if (viewType == MESSAGE_SEND) {
             val view = LayoutInflater.from(context).inflate(R.layout.message_sent, parent, false)
-            return SendViewHolder(view)
+            SendViewHolder(view)
         } else {
             val view = LayoutInflater.from(context).inflate(R.layout.message_recived, parent, false)
-            return ReciveViewHolder(view)
+            ReciveViewHolder(view)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (messageList.get(position).senderId == FirebaseAuth.getInstance().uid) {
-            return MESSAGE_SEND
+        return if (messageList.get(position).isOutgoing) {
+            MESSAGE_SEND
         } else
-            return MESSAGE_RECIVE
+            MESSAGE_RECIVE
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder.javaClass == SendViewHolder::class.java) {
-            (holder as (SendViewHolder)).bind(messageList[position])
-        } else
-            (holder as (ReciveViewHolder)).bind(messageList[position])
+        val msg = messageList[position]
+        if (holder is SendViewHolder) {
+            holder.bind(msg)
+        } else if (holder is ReciveViewHolder) {
+            holder.bind(msg)
+        }
+
+        /*
+if (holder.javaClass == SendViewHolder::class.java) {
+    (holder as (SendViewHolder)).bind(messageList[position])
+} else
+    (holder as (ReciveViewHolder)).bind(messageList[position])*/
     }
 
     override fun getItemCount(): Int {

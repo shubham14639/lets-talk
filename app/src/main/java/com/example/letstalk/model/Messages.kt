@@ -7,6 +7,7 @@ class Messages {
     var timeStamp: String = ""
     var attachImage: String = ""
     var userProfile: String = ""
+    var isOutgoing: Boolean = false
 
     constructor()
     constructor(
@@ -14,15 +15,17 @@ class Messages {
         message: String,
         timeStamp: String,
         reciverId: String,
-        attachImage:String,
-        userProfile: String
+        attachImage: String,
+        userProfile: String,
+        isOutgoing: Boolean
     ) {
         this.reciverId = reciverId
         this.timeStamp = timeStamp
         this.message = message
         this.senderId = senderId
-        this.attachImage=attachImage
+        this.attachImage = attachImage
         this.userProfile = userProfile
+        this.isOutgoing = isOutgoing
     }
 }
 
