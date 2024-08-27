@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+## code changes will send PR to following users
+* @option1-user1 @option1-user2 @option2-your-org/team-name
