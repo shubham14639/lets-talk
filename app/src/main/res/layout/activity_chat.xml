@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,62 +7,64 @@
     android:orientation="vertical"
     tools:context=".Activity.ChatActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_recylerview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:listitem="@layout/message_sent"
-        android:layout_marginTop="4dp"
-        android:layout_weight="1" />
+        android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recylerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginTop="4dp"
+            tools:listitem="@layout/message_sent" />
 
-            <EditText
-                android:id="@+id/et_chatMsg"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/type_msg"
-                android:inputType="textPersonName"
-                android:textSize="18sp" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_attach"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                app:srcCompat="@drawable/ic_baseline_attachment_24"
-                tools:ignore="VectorDrawableCompat" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_camera"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                app:srcCompat="@drawable/ic_baseline_camera_alt_24"
-                tools:ignore="VectorDrawableCompat" />
+                <EditText
+                    android:id="@+id/et_chatMsg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/type_msg"
+                    android:inputType="textPersonName"
+                    android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/btn_send"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/ic_baseline_send_24"
-                android:src="@drawable/ic_baseline_send_24" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/iv_attach"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    app:srcCompat="@drawable/ic_baseline_attachment_24"
+                    tools:ignore="VectorDrawableCompat" />
 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_camera"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    app:srcCompat="@drawable/ic_baseline_camera_alt_24"
+                    tools:ignore="VectorDrawableCompat" />
+
+                <Button
+                    android:id="@+id/btn_send"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/ic_baseline_send_24"
+                    android:src="@drawable/ic_baseline_send_24" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

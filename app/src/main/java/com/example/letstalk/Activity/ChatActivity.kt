@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 const val TOPIC = "/topics/myTopic2"
 
@@ -58,6 +61,7 @@ class ChatActivity : AppCompatActivity() {
             it.layoutManager = LinearLayoutManager(this@ChatActivity)
             it.adapter = messageAdapter
         }
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             FirebaseService.token = it.token
@@ -179,6 +183,7 @@ class ChatActivity : AppCompatActivity() {
         lastMsg.put("lastMsg", message.message)
         lastMsg.put("lastMsgTime", DateUitil.currentTime)
         database.getReference().child("users").child(reciverName).updateChildren(lastMsg as Map<String, Any>)
+        messageList.add(message)
 
         database.getReference().child("Messages").child(reciverName)
             .push()
@@ -205,6 +210,7 @@ class ChatActivity : AppCompatActivity() {
                         }
                         Log.d("MYTAG", "message list after if else  $messageList")
                         messageAdapter = MessageAdapter(this@ChatActivity, messageList)
+
                         binding.chatRecylerview.let {
                             it.layoutManager = LinearLayoutManager(this@ChatActivity)
                             it.adapter = messageAdapter
