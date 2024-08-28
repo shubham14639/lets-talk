@@ -16,7 +16,9 @@
         android:theme="@style/Theme.LetsTalk">
         <activity android:name=".Activity.ProfileActivity" />
         <activity android:name=".Activity.PhoneAuthActivity" />
-        <activity android:name=".Activity.ChatActivity" />
+        <activity android:name=".Activity.ChatActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            />
         <activity android:name=".Activity.SetupUserProfile" />
         <activity android:name=".Activity.OtpVerifyActivity" />
         <activity android:name=".Activity.MainActivity" />

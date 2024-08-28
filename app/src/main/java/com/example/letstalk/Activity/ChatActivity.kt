@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -58,6 +60,9 @@ class ChatActivity : AppCompatActivity() {
             it.layoutManager = LinearLayoutManager(this@ChatActivity)
             it.adapter = messageAdapter
         }
+        this.getWindow()
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             FirebaseService.token = it.token
@@ -174,11 +179,13 @@ class ChatActivity : AppCompatActivity() {
             userProfile = users.userProfile,
             isOutgoing = true
         )
+        messageAdapter.addMessage(message)
         binding.etChatMsg.setText("")
         val lastMsg: HashMap<String, String> = HashMap()
         lastMsg.put("lastMsg", message.message)
         lastMsg.put("lastMsgTime", DateUitil.currentTime)
-        database.getReference().child("users").child(reciverName).updateChildren(lastMsg as Map<String, Any>)
+        database.getReference().child("users").child(reciverName)
+            .updateChildren(lastMsg as Map<String, Any>)
 
         database.getReference().child("Messages").child(reciverName)
             .push()
@@ -195,12 +202,15 @@ class ChatActivity : AppCompatActivity() {
                 for (snap in snapshot.children) {
                     val chat: Messages? = snap.getValue(Messages::class.java)
                     if (chat != null) {
-                        Log.d("MYTAG", "chat reciverid  ${chat.reciverId}   uid ${FirebaseAuth.getInstance().uid}")
+                        Log.d(
+                            "MYTAG",
+                            "chat reciverid  ${chat.reciverId}   uid ${FirebaseAuth.getInstance().uid}"
+                        )
                         if (chat.reciverId == FirebaseAuth.getInstance().uid) {
                             messageList.add(chat)
                         } else
                             messageList.add(chat)
-                        messageList.forEach{
+                        messageList.forEach {
                             Log.d("MYTAG", "message list for each: ${it.message}")
                         }
                         Log.d("MYTAG", "message list after if else  $messageList")
@@ -210,8 +220,29 @@ class ChatActivity : AppCompatActivity() {
                             it.adapter = messageAdapter
                         }
                         messageAdapter.notifyDataSetChanged()
-                        binding.chatRecylerview.smoothScrollToPosition(messageList.size)
-                    }else{
+                        binding.chatRecylerview.addOnLayoutChangeListener(object :
+                            View.OnLayoutChangeListener {
+                            override fun onLayoutChange(
+                                view: View?,
+                                left: Int,
+                                top: Int,
+                                right: Int,
+                                bottom: Int,
+                                oldLeft: Int,
+                                oldTop: Int,
+                                oldRight: Int,
+                                oldBottom: Int
+                            ) {
+                                if (bottom < oldBottom) {
+                                    binding.chatRecylerview.postDelayed(Runnable {
+                                        binding.chatRecylerview.smoothScrollToPosition(
+                                            messageAdapter.getItemCount()
+                                        )
+                                    }, 100)
+                                }
+                            }
+                        })
+                    } else {
                         Log.d("MYTAG", "chat is null  $messageList")
 
                     }
